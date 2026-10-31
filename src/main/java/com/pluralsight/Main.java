@@ -1,32 +1,47 @@
 package com.pluralsight;
 
-import java.util.ArrayList;
 import java.util.Scanner;
 
 public class Main {
 
+    public static Scanner userInput = new Scanner(System.in);
+
+    public static int positionX = 2572;
+    public static int positionY = 25;
+
     public static void main(String[] args) {
 
-        Scanner userInput = new Scanner(System.in);
         homeScreen();
     }
 
     //todo / create display/ find variables/ make moving printing logic/ thread.sleep bug/ menu/
-    public static void homeScreen (Scanner userInput) {
+    public static void homeScreen () {
 
-        int playerX = 2572;
-        int playerY = 25;
         do {
-            displayHomeScreen(playerX, playerY);
-        } while (userInput.equals("1"));
+            displayHomeScreen();
+            heartMovement();
+        } while (!userInput.equals("1"));
 
     }
 
-    public static void displayHomeScreen (int playerX, int playerY) {
-        int height = 25;
-        int width = 105;
-        int x;
-        int y;
+    public static void heartMovement () {
+        String up = "t";
+        String left = "f";
+        String right = "h";
+        String down = "g";
+        String movement = userInput.nextLine();
+        switch (movement) {
+            case "t" -> positionX -= 105;
+            case "f" -> positionX -= 1;
+            case "h" -> positionX += 1;
+            case "G" -> positionX += 105;
+            default -> {
+
+            }
+        }
+    }
+
+    public static void displayHomeScreen() {
         StringBuilder homeScreenDisplay = new StringBuilder("""
                 
                 1                                                                                                      |
@@ -62,12 +77,10 @@ public class Main {
                         │ G │
                         └───┘
                 """);
-        homeScreenDisplay.replace(playerX, playerX + 1, "❤️");
+        homeScreenDisplay.replace(positionX, positionX + 1, "❤️");
+        homeScreenDisplay.delete(positionX - 1, positionX);
         System.out.println(homeScreenDisplay);
         System.out.println(buttons);
-        homeScreenDisplay.replace(playerX, playerX + 1, " ");
-        homeScreenDisplay.replace((playerX - (width)), (playerX - (width)), "❤️");
-        System.out.println(homeScreenDisplay);
-        System.out.println(buttons);
+
     }
 }
