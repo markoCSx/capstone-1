@@ -14,8 +14,10 @@ public class Main {
         int width = 103;
         int x;
         int y = 1;
+        int playerY = 25;
+        int playerX = 2572;
 
-        String homeScreenDisplay ="""
+        StringBuilder homeScreenDisplay = new StringBuilder("""
  
 1                                                                                                      |
 2                                                                                                      |
@@ -26,25 +28,34 @@ public class Main {
 7                                                                                                      |
 8                                                                                                      |
 9                                                                                                      |
-10                                                                                                     |
-11                                                                                                     |
-12                                                                                                     |
-13                                                                                                     |
-14                                                                                                     |
-15                                                                                                     |
-16                                                                                                     |
-17                                                                                                     |
-19                                                                                                     |
-18                                                                                                     |
-20                                                                                                     |
-21                                                                                                     |
-22                                                                                                     |
-23                                                                                                     |
-24                                                                                                     |
-25                                                                                                     |""";
-        for (int i = 1; i <= homeScreenDisplay.length(); i += (width + 2) ) {  // +2 tarting & invis char
-            System.out.println(homeScreenDisplay.substring(i, (width + 2) * y ));
+1                                                                                                      |
+1                                                                                                      |
+1                                                                                                      |
+1                                                                                                      |
+1                                                                                                      |
+1                                                                                                      |
+1                                                                                                      |
+1                                                                                                      |
+1                                                                                                      |
+1                                                                                                      |
+2                                                                                                      |
+2                                                                                                      |
+2                                                                                                      |
+2                                                                                                      |
+2                                                                                                      |
+2                                                                                                      |""");
+        homeScreenDisplay.replace(playerX, playerX, "❤️");
+        System.out.println(homeScreenDisplay);
+        homeScreenDisplay.replace((playerX - (width + 2)), (playerX - (width + 2)), "❤️");
+        System.out.println(homeScreenDisplay);
+        /*for (int i = 1; i <= homeScreenDisplay.length(); i += (width + 2) ) {  // +2 tarting & invis char
+            if (y != playerY) {
+                System.out.println(homeScreenDisplay.substring(i, (width + 2) * y));
+            }
+            if (y == playerY) {
+                homeScreenDisplay.substring(i, (width + 2) * y).
+            }
             y += 1;
-        }
+        }*/
     }
 }
