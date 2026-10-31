@@ -1,5 +1,6 @@
 package com.pluralsight;
 
+import java.util.ArrayList;
 import java.util.Scanner;
 
 public class Main {
@@ -9,6 +10,9 @@ public class Main {
     public static int positionX = 2572;
     public static int positionY = 25;
     public static String userInput = "0";
+    ArrayList<Deposit> deposits = new ArrayList<>();
+    ArrayList<Payment> payments = new ArrayList<>();
+    ArrayList<String> transactions = new ArrayList<>();
 
     public static void main(String[] args) {
 
@@ -16,6 +20,19 @@ public class Main {
 
     }
 
+    public static void addDeposit () {
+
+    }
+
+    public static void makePayment () {
+
+    }
+
+    public static void Ledger () {
+
+    }
+
+    //region HOME SCREEN METHODS
     //todo / edit display (undertale theme / smaller) / thread.sleep bug / menu / comments for methods /
     public static void homeScreen () {
 
@@ -25,33 +42,6 @@ public class Main {
 
         } while (!userInput.equalsIgnoreCase("x"));
 
-    }
-
-    private static void optionSelect(String userInput) {
-
-        switch (userInput.toLowerCase()) {
-            case "d" -> {}
-            case "p" -> {}
-            case "l" -> {}
-            case "x" -> {}
-            default -> {
-                displayHomeScreen();
-            }
-        }
-
-    }
-
-    public static void heartMovement () {
-        userInput = scanner.nextLine();
-        switch (userInput.toLowerCase()) {
-            case "t" -> positionX -= 315;
-            case "f" -> positionX -= 6;
-            case "h" -> positionX += 6;
-            case "g" -> positionX += 315;
-            default -> {
-                optionSelect(userInput);
-            }
-        }
     }
 
     public static void displayHomeScreen() {
@@ -102,4 +92,32 @@ public class Main {
         System.out.println(buttons);
         heartMovement();
     }
+
+    public static void heartMovement () {
+        userInput = scanner.nextLine();
+        switch (userInput.toLowerCase()) {
+            case "t" -> positionX -= 315;
+            case "f" -> positionX -= 6;
+            case "h" -> positionX += 6;
+            case "g" -> positionX += 315;
+            default -> {
+                optionSelect(userInput);
+            }
+        }
+    }
+
+    private static void optionSelect(String userInput) {
+
+        switch (userInput.toLowerCase()) {
+            case "d" -> {}
+            case "p" -> {}
+            case "l" -> {}
+            case "x" -> {}
+            default -> {
+                displayHomeScreen();
+            }
+        }
+
+    }
+    //endregion
 }
