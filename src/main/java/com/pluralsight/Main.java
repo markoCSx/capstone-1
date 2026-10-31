@@ -20,15 +20,12 @@ public class Main {
         do {
             displayHomeScreen();
             heartMovement();
+
         } while (!userInput.equals("1"));
 
     }
 
     public static void heartMovement () {
-        String up = "t";
-        String left = "f";
-        String right = "h";
-        String down = "g";
         String movement = userInput.nextLine();
         switch (movement) {
             case "t" -> positionX -= 105;
@@ -44,13 +41,13 @@ public class Main {
     public static void displayHomeScreen() {
         StringBuilder homeScreenDisplay = new StringBuilder("""
                 
-                1                                                                                                      |
-                2                                                                                                      |
-                3                                                                                                      |
-                4                                                                                                      |
-                5                                                                                                      |
-                6                                                                                                      |
-                7                                                                                                      |
+                1                   ██╗  ██╗    ████████╗ ██████╗     ███████╗██╗  ██╗██╗████████╗                     |
+                2                   ╚██╗██╔╝    ╚══██╔══╝██╔═══██╗    ██╔════╝╚██╗██╔╝██║╚══██╔══╝                     |
+                3                    ╚███╔╝        ██║   ██║   ██║    █████╗   ╚███╔╝ ██║   ██║                        |
+                4                    ██╔██╗        ██║   ██║   ██║    ██╔══╝   ██╔██╗ ██║   ██║                        |
+                5                   ██╔╝ ██╗       ██║   ╚██████╔╝    ███████╗██╔╝ ██╗██║   ██║                        |
+                6                   ╚═╝  ╚═╝       ╚═╝    ╚═════╝     ╚══════╝╚═╝  ╚═╝╚═╝   ╚═╝                        |
+                7                    D) Add Deposit    P) Make Payment (Debit)    L) Ledger                            |
                 8                                                                                                      |
                 9                                                                                                      |
                 1                                                                                                      |
