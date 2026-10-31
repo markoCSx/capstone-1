@@ -4,10 +4,11 @@ import java.util.Scanner;
 
 public class Main {
 
-    public static Scanner userInput = new Scanner(System.in);
+    public static Scanner scanner = new Scanner(System.in);
 
     public static int positionX = 2572;
     public static int positionY = 25;
+    public static String userInput = "0";
 
     public static void main(String[] args) {
 
@@ -18,30 +19,38 @@ public class Main {
     //todo / edit display (undertale theme / smaller) / thread.sleep bug / menu / comments for methods /
     public static void homeScreen () {
 
-        String userText = "0";
-
-        do {
-
-            userText = displayHomeScreen();
-
-        } while (!userText.equals("1"));
+        displayHomeScreen();
 
     }
 
-    public static String heartMovement () {
-        String movement = userInput.nextLine();
-        switch (movement.toLowerCase()) {
+    private static void optionSelect(String userInput) {
+
+        switch (userInput.toLowerCase()) {
+            case "d" -> {}
+            case "p" -> {}
+            case "l" -> {}
+            case "x" -> {}
+            default -> {
+                displayHomeScreen();
+            }
+        }
+
+    }
+
+    public static void heartMovement () {
+        userInput = scanner.nextLine();
+        switch (userInput.toLowerCase()) {
             case "t" -> positionX -= 315;
             case "f" -> positionX -= 6;
             case "h" -> positionX += 6;
             case "g" -> positionX += 315;
             default -> {
+                optionSelect(userInput);
             }
         }
-        return movement;
     }
 
-    public static String displayHomeScreen() {
+    public static void displayHomeScreen() {
         StringBuilder homeScreenDisplay = new StringBuilder("""
                 
                 1                   ██╗  ██╗    ████████╗ ██████╗     ███████╗██╗  ██╗██╗████████╗                     |
@@ -87,6 +96,6 @@ public class Main {
         homeScreenDisplay.delete(positionX - 1, positionX);
         System.out.println(homeScreenDisplay);
         System.out.println(buttons);
-        return heartMovement();
+        heartMovement();
     }
 }
