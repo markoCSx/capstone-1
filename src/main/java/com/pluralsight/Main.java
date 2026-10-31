@@ -12,33 +12,36 @@ public class Main {
     public static void main(String[] args) {
 
         homeScreen();
+
     }
 
-    //todo / create display/ find variables/ make moving printing logic/ thread.sleep bug/ menu/
+    //todo / edit display (undertale theme / smaller) / thread.sleep bug / menu / comments for methods /
     public static void homeScreen () {
 
-        do {
-            displayHomeScreen();
-            heartMovement();
+        String userText = "0";
 
-        } while (!userInput.equals("1"));
+        do {
+
+            userText = displayHomeScreen();
+
+        } while (!userText.equals("1"));
 
     }
 
-    public static void heartMovement () {
+    public static String heartMovement () {
         String movement = userInput.nextLine();
-        switch (movement) {
-            case "t" -> positionX -= 105;
-            case "f" -> positionX -= 1;
-            case "h" -> positionX += 1;
-            case "G" -> positionX += 105;
+        switch (movement.toLowerCase()) {
+            case "t" -> positionX -= 315;
+            case "f" -> positionX -= 6;
+            case "h" -> positionX += 6;
+            case "g" -> positionX += 315;
             default -> {
-
             }
         }
+        return movement;
     }
 
-    public static void displayHomeScreen() {
+    public static String displayHomeScreen() {
         StringBuilder homeScreenDisplay = new StringBuilder("""
                 
                 1                   ██╗  ██╗    ████████╗ ██████╗     ███████╗██╗  ██╗██╗████████╗                     |
@@ -74,10 +77,16 @@ public class Main {
                         │ G │
                         └───┘
                 """);
+        if (positionX < 0) {
+            positionX += homeScreenDisplay.length();
+        }
+        if (positionX > homeScreenDisplay.length()) {
+            positionX -= homeScreenDisplay.length();
+        }
         homeScreenDisplay.replace(positionX, positionX + 1, "❤️");
         homeScreenDisplay.delete(positionX - 1, positionX);
         System.out.println(homeScreenDisplay);
         System.out.println(buttons);
-
+        return heartMovement();
     }
 }
