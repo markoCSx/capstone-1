@@ -19,7 +19,11 @@ public class Main {
     //todo / edit display (undertale theme / smaller) / thread.sleep bug / menu / comments for methods /
     public static void homeScreen () {
 
-        displayHomeScreen();
+        do {
+
+            displayHomeScreen();
+
+        } while (!userInput.equalsIgnoreCase("x"));
 
     }
 
