@@ -10,20 +10,39 @@ public class Main {
 
     //todo / create display/ find variables/ make moving printing logic/ thread.sleep bug/ menu/
     public static void homeScreen () {
-        int height;
-        int width;
+        int height = 25;
+        int width = 103;
         int x;
         int y;
 
         String homeScreenDisplay =
-                "       *       ." +
-                "   .--.     * " +
-                " .(    ).       ☁" +
-                "(___.__)__)" +
-                "                 " +
-                "   ☁     ✧    ☁";
-        for (int i = 0; i < homeScreenDisplay.length(); i += 10) {
-            System.out.println(homeScreenDisplay.substring(i, i+10));
-        }
+                """
+                        1                                                                                                    |
+                        2                                                                                                    |
+                        3                                                                                                    |
+                        4                                                                                                    |
+                        5                                                                                                    |
+                        6                                                                                                    |
+                        7                                                                                                    |
+                        8                                                                                                    |
+                        9                                                                                                    |
+                        10                                                                                                   |
+                        11                                                                                                   |
+                        12                                                                                                   |
+                        13                                                                                                   |
+                        14                                                                                                   |
+                        15                                                                                                   |
+                        16                                                                                                   |
+                        17                                                                                                   |
+                        18                                                                                                   |
+                        19                                                                                                   |
+                        20                                                                                                   |
+                        21                                                                                                   |
+                        22                                                                                                   |
+                        23                                                                                                   |
+                        24                                                                                                   |
+                        25                                                                                                   |
+                        """;
+        System.out.println(homeScreenDisplay);
     }
 }
