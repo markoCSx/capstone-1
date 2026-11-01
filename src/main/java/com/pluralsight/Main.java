@@ -1,13 +1,12 @@
 package com.pluralsight;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Scanner;
 
-public class Main {// todo add more comments
+public class Main {// todo add more comments / have questions pop up on main screen
 
     public static Scanner scanner = new Scanner(System.in);
 
@@ -18,9 +17,9 @@ public class Main {// todo add more comments
 
     public static ArrayList<Deposit> deposits = new ArrayList<>();
     public static ArrayList<Payment> payments = new ArrayList<>();
-    public static ArrayList<String> transactions = new ArrayList<>();
+    public static ArrayList<Transaction> transactions = new ArrayList<>();
 
-    public static void main(String[] args) {
+    public static void main(String[] args) { // todo / bank, shops, phone / better ui / maybe find a better way to display screen
 
         homeScreen();
 
@@ -50,6 +49,13 @@ public class Main {// todo add more comments
             }
         }
         deposits.add(new Deposit(dateOrTime("date"), dateOrTime("time"), description, vendor, amount));
+    }
+
+    public static void makePayment () {
+
+    }
+
+    public static void Ledger () {
 
     }
 
@@ -66,6 +72,7 @@ public class Main {// todo add more comments
         return scanner.nextLine().strip();
     }
 
+    // todo option to set date
     public static String dateOrTime (String dateOrTime) {
 
         switch (dateOrTime) {
@@ -83,16 +90,7 @@ public class Main {// todo add more comments
         return "x";
     }
 
-    public static void makePayment () {
-
-    }
-
-    public static void Ledger () {
-
-    }
-
-    //region HOME SCREEN METHODS
-    //todo / edit display (undertale theme / smaller) / thread.sleep bug / menu / comments for methods /
+    //region HOME SCREEN METHODS// todo / edit display (undertale theme / smaller) / thread.sleep bug / menu / comments for methods /
     public static void homeScreen () {
 
         do {
