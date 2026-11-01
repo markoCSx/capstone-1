@@ -13,7 +13,9 @@ public class Main {// todo add more comments
 
     public static int positionX = 2572;
     public static int positionY = 25;
+
     public static String userInput = "0";
+
     public static ArrayList<Deposit> deposits = new ArrayList<>();
     public static ArrayList<Payment> payments = new ArrayList<>();
     public static ArrayList<String> transactions = new ArrayList<>();
@@ -24,31 +26,61 @@ public class Main {// todo add more comments
 
     }
 
-    // todo / maybe change date and time format / x to exit option
+    // todo / maybe change date and time format / x to exit option / make it simpler / check to see if I can put time in deposit / error msg on home screen
     public static void addDeposit () {
-        String userText;
-        DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-        DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("hh:mm:ss");
-        System.out.println("Add Deposit");
+        String userText = "0";
+        String description = "N/A";
+        String vendor = "N/A";
+        double amount = 0;
+        for (int i = 1; !userText.equalsIgnoreCase("x"); i++) {
+            userText = question(i, userText);
+            switch (i) {
+                case 1 -> description = userText;
+                case 2 -> vendor = userText;
+                case 3 -> {
+                    try {amount = Double.parseDouble(userText);
+                    }
+                    catch (NumberFormatException e) {
+                        System.out.println("Enter a valid number next time" + e.getMessage());
+                    }
+                }
+                default -> {
+                    break;
+                }
+            }
+        }
+        deposits.add(new Deposit(dateOrTime("date"), dateOrTime("time"), description, vendor, amount));
 
-        System.out.print("Description: ");
-        userText = scanner.nextLine().strip();
-        String description = userText;
+    }
 
-        System.out.print("Vendor: ");
-        userText = scanner.nextLine().strip();
-        String vendor = userText;
+    public static String question (int i, String userText) {
 
-        System.out.print("Description: ");
-        userText = scanner.nextLine().strip();
-        double amount = Double.parseDouble(userText);
+        switch (i) {
+            case 1 -> System.out.print("Description: ");
+            case 2 -> System.out.print("Vendor: ");
+            case 3 -> System.out.print("Amount: ");
+            default -> {
+                return "x";
+            }
+        }
+        return scanner.nextLine().strip();
+    }
 
-        LocalDate nowDate = LocalDate.now();
-        LocalTime nowTime = LocalTime.now();
-        String date = nowDate.format(dateFormatter);
-        String time = nowTime.format(timeFormatter);
-        deposits.add(new Deposit(date, time, description, vendor, amount));
+    public static String dateOrTime (String dateOrTime) {
 
+        switch (dateOrTime) {
+            case "date" -> {
+                DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+                LocalDate nowDate = LocalDate.now();
+                return nowDate.format(dateFormatter);
+            }
+            case "time" -> {
+                DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("hh:mm:ss");
+                LocalTime nowTime = LocalTime.now();
+                return nowTime.format(timeFormatter);
+            }
+        }
+        return "x";
     }
 
     public static void makePayment () {
@@ -136,7 +168,7 @@ public class Main {// todo add more comments
     private static void optionSelect(String userInput) {
 
         switch (userInput.toLowerCase()) {
-            case "d" -> {}
+            case "d" -> {addDeposit();}
             case "p" -> {}
             case "l" -> {}
             case "x" -> {}
