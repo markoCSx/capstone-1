@@ -61,7 +61,35 @@ public class Main {// todo add more comments / have questions pop up on main scr
     }
 
     public static void makePayment () {
-
+        LocalDate date = LocalDate.parse("0001-01-01");
+        LocalTime time = LocalTime.parse("00:00:00");
+        String userText = "0";
+        String description = "N/A";
+        String vendor = "N/A";
+        double amount = 0;
+        try {
+            for (int i = 1; !userText.equalsIgnoreCase("x"); i++) {
+                userText = question(i, userText);
+                switch (i) {
+                    case 1 -> date = LocalDate.parse(userText);
+                    case 2 -> time = LocalTime.parse(userText);
+                    case 3 -> description = userText;
+                    case 4 -> vendor = userText;
+                    case 5 -> amount = Double.parseDouble(userText);
+                    default -> {
+                        break;
+                    }
+                }
+            }
+        }
+        catch (NumberFormatException e) {
+            System.out.println("Enter a valid entry next time" + e.getMessage());
+        }
+        catch (DateTimeException e) {
+            System.out.println("Enter a valid entry next time" + e.getMessage());
+        }
+        payments.add(new Payment(date, time, description, vendor, amount));
+        transactions.add(new Transaction(date, time, description, vendor, amount));
     }
 
     public static void Ledger () {
