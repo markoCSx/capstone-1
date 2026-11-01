@@ -22,6 +22,7 @@ public class Main {// todo add more comments / have questions pop up on main scr
     public static void main(String[] args) { // todo / bank, shops, phone / better ui / maybe find a better way to display screen
 
         homeScreen();
+        System.out.println(deposits.get(0).getDate() + " " + deposits.get(0).getTime());
 
     }
 
@@ -48,7 +49,8 @@ public class Main {// todo add more comments / have questions pop up on main scr
                 }
             }
         }
-        deposits.add(new Deposit(dateOrTime("date"), dateOrTime("time"), description, vendor, amount));
+        deposits.add(new Deposit(LocalDate.now(), LocalTime.now(), description, vendor, amount));
+        transactions.add(new Transaction(LocalDate.now(), LocalTime.now(), description, vendor, amount));
     }
 
     public static void makePayment () {
@@ -70,24 +72,6 @@ public class Main {// todo add more comments / have questions pop up on main scr
             }
         }
         return scanner.nextLine().strip();
-    }
-
-    // todo option to set date
-    public static String dateOrTime (String dateOrTime) {
-
-        switch (dateOrTime) {
-            case "date" -> {
-                DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-                LocalDate nowDate = LocalDate.now();
-                return nowDate.format(dateFormatter);
-            }
-            case "time" -> {
-                DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("hh:mm:ss");
-                LocalTime nowTime = LocalTime.now();
-                return nowTime.format(timeFormatter);
-            }
-        }
-        return "x";
     }
 
     //region HOME SCREEN METHODS// todo / edit display (undertale theme / smaller) / thread.sleep bug / menu / comments for methods /
