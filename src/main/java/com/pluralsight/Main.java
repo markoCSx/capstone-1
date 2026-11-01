@@ -1,5 +1,6 @@
 package com.pluralsight;
 
+import java.time.DateTimeException;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
@@ -26,31 +27,37 @@ public class Main {// todo add more comments / have questions pop up on main scr
 
     }
 
-    // todo / maybe change date and time format / x to exit option / make it simpler / check to see if I can put time in deposit / error msg on home screen
+    // todo / maybe change date and time format / x to exit option / make it simpler / check to see if I can put time in deposit / error msg on home screen / clearer error msgs
     public static void addDeposit () {
+        LocalDate date = LocalDate.parse("0001-01-01");
+        LocalTime time = LocalTime.parse("00:00:00");
         String userText = "0";
         String description = "N/A";
         String vendor = "N/A";
         double amount = 0;
-        for (int i = 1; !userText.equalsIgnoreCase("x"); i++) {
-            userText = question(i, userText);
-            switch (i) {
-                case 1 -> description = userText;
-                case 2 -> vendor = userText;
-                case 3 -> {
-                    try {amount = Double.parseDouble(userText);
+        try {
+            for (int i = 1; !userText.equalsIgnoreCase("x"); i++) {
+                userText = question(i, userText);
+                switch (i) {
+                    case 1 -> date = LocalDate.parse(userText);
+                    case 2 -> time = LocalTime.parse(userText);
+                    case 3 -> description = userText;
+                    case 4 -> vendor = userText;
+                    case 5 -> amount = Double.parseDouble(userText);
+                    default -> {
+                        break;
                     }
-                    catch (NumberFormatException e) {
-                        System.out.println("Enter a valid number next time" + e.getMessage());
-                    }
-                }
-                default -> {
-                    break;
                 }
             }
         }
-        deposits.add(new Deposit(LocalDate.now(), LocalTime.now(), description, vendor, amount));
-        transactions.add(new Transaction(LocalDate.now(), LocalTime.now(), description, vendor, amount));
+        catch (NumberFormatException e) {
+            System.out.println("Enter a valid entry next time" + e.getMessage());
+        }
+        catch (DateTimeException e) {
+            System.out.println("Enter a valid entry next time" + e.getMessage());
+        }
+        deposits.add(new Deposit(date, time, description, vendor, amount));
+        transactions.add(new Transaction(date, time, description, vendor, amount));
     }
 
     public static void makePayment () {
@@ -64,9 +71,11 @@ public class Main {// todo add more comments / have questions pop up on main scr
     public static String question (int i, String userText) {
 
         switch (i) {
-            case 1 -> System.out.print("Description: ");
-            case 2 -> System.out.print("Vendor: ");
-            case 3 -> System.out.print("Amount: ");
+            case 1 -> System.out.print("Date (yyyy-MM-dd): ");
+            case 2 -> System.out.print("Time (HH:mm:ss): ");
+            case 3 -> System.out.print("Description: ");
+            case 4 -> System.out.print("Vendor: ");
+            case 5 -> System.out.print("Amount: ");
             default -> {
                 return "x";
             }
