@@ -23,7 +23,7 @@ public class Main {// todo add more comments / have questions pop up on main scr
     public static void main(String[] args) { // todo / bank, shops, phone / better ui / maybe find a better way to display screen
 
         homeScreen();
-        System.out.println(deposits.get(0).getDate() + " " + deposits.get(0).getTime());
+        transactions.get(0).display(transactions, 0);
 
     }
 
@@ -49,6 +49,8 @@ public class Main {// todo add more comments / have questions pop up on main scr
                     }
                 }
             }
+            deposits.add(new Deposit(date, time, description, vendor, amount));
+            transactions.add(new Transaction(date, time, description, vendor, amount));
         }
         catch (NumberFormatException e) {
             System.out.println("Enter a valid entry next time" + e.getMessage());
@@ -56,8 +58,6 @@ public class Main {// todo add more comments / have questions pop up on main scr
         catch (DateTimeException e) {
             System.out.println("Enter a valid entry next time" + e.getMessage());
         }
-        deposits.add(new Deposit(date, time, description, vendor, amount));
-        transactions.add(new Transaction(date, time, description, vendor, amount));
     }
 
     public static void makePayment () {
@@ -81,6 +81,8 @@ public class Main {// todo add more comments / have questions pop up on main scr
                     }
                 }
             }
+            payments.add(new Payment(date, time, description, vendor, amount));
+            transactions.add(new Transaction(date, time, description, vendor, amount));
         }
         catch (NumberFormatException e) {
             System.out.println("Enter a valid entry next time" + e.getMessage());
@@ -88,8 +90,6 @@ public class Main {// todo add more comments / have questions pop up on main scr
         catch (DateTimeException e) {
             System.out.println("Enter a valid entry next time" + e.getMessage());
         }
-        payments.add(new Payment(date, time, description, vendor, amount));
-        transactions.add(new Transaction(date, time, description, vendor, amount));
     }
 
     public static void Ledger () {

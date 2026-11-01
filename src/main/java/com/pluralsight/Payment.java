@@ -3,9 +3,11 @@ package com.pluralsight;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 
 public class Payment {
 
+    private final int fields = 5; //magic number (keep updated)
     private LocalDate date;
     private LocalTime time;
     private String description;
@@ -19,6 +21,62 @@ public class Payment {
         this.description = description;
         this.vendor = vendor;
         this.amount = amount;
+    }
+
+    public int fieldLength(int index) {
+        switch (index) {
+            case 0 -> {
+                return String.format("%s", this.date).length();
+            }
+            case 1 -> {
+                return String.format("%s", this.time).length();
+            }
+            case 2 -> {
+                return this.description.length();
+            }
+            case 3 -> {
+                return this.vendor.length();
+            }
+            case 4 -> {
+                return String.format("%.2f", this.amount).length();
+            }
+        }
+        return 0;
+    }
+
+    public String fieldString(int index) {
+        switch (index) {
+            case 0 -> {
+                return String.format("%s", this.date);
+            }
+            case 1 -> {
+                return String.format("%s", this.time);
+            }
+            case 2 -> {
+                return this.description;
+            }
+            case 3 -> {
+                return this.vendor;
+            }
+            case 4 -> {
+                return String.format("%.2f", this.amount);
+            }
+        }
+        return null;
+    }
+
+    public void display(ArrayList<Transaction> transactions, int index) {
+        for (int i = 0; i < this.fields - 1; i++) { //minus 1 cuz indexs start at 0
+            System.out.print(transactions.get(index).fieldString(i));
+            if (transactions.get(index).fieldLength(i) < 10) {
+                for (int j = 0; j == 10 - transactions.get(index).fieldLength(i); j++) {
+                    System.out.print(" ");
+                }
+            }
+            if (i < this.fields - 2) { //1 2 many pipes
+                System.out.print("|");
+            }
+        }
     }
 
     public LocalDate getDate() {
