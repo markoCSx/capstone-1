@@ -47,16 +47,10 @@ public class Main {//
             FileReader fileReader = new FileReader("src/main/resources/transactions.csv");
             BufferedReader bufferedReader = new BufferedReader(fileReader);
 
-            String[] transactionSplit;
-
             String line = bufferedReader.readLine();
             while (line != null) {
                 line = bufferedReader.readLine();
-                transactionSplit = line.split(Pattern.quote("|"));
-                for (int i = 0; i < transactionSplit.length; i++) {
-                    transactionSplit[i] = transactionSplit[i].trim();
-                }
-                    addTransaction(transactionSplit);
+                addTransaction(line);
             }
             fileReader.close();
         }
@@ -66,32 +60,25 @@ public class Main {//
 
     }
 
-    public static void addTransaction (String[] depositSplit) {
-
-    }
-
-    public static void Ledger () {
-
-    }
-
-
-    //region options menu
-    public static void addTransaction () {
+    public static void addTransaction (String transactionString) {
+        String[] transactionSplit;
+        transactionSplit = transactionString.split(Pattern.quote("|"));
+        for (int i = 0; i < transactionSplit.length; i++) {
+            transactionSplit[i] = transactionSplit[i].trim();
+        }
         LocalDate date = LocalDate.parse("0001-01-01");
         LocalTime time = LocalTime.parse("00:00:00");
-        String userText = "0";
         String description = "N/A";
         String vendor = "N/A";
         double amount = 0;
         try {
-            for (int i = 1; !userText.equalsIgnoreCase("x"); i++) {
-                userText = question(i, userText);
+            for (int i = 0; i < transactionSplit.length; i++) {
                 switch (i) {
-                    case 1 -> date = LocalDate.parse(userText);
-                    case 2 -> time = LocalTime.parse(userText);
-                    case 3 -> description = userText;
-                    case 4 -> vendor = userText;
-                    case 5 -> amount = Double.parseDouble(userText);
+                    case 0 -> date = LocalDate.parse(transactionSplit[i]);
+                    case 1 -> time = LocalTime.parse(transactionSplit[i]);
+                    case 2 -> description = transactionSplit[i];
+                    case 3 -> vendor = transactionSplit[i];
+                    case 4 -> amount = Double.parseDouble(transactionSplit[i]);
                     default -> {
                         break;
                     }
@@ -100,15 +87,16 @@ public class Main {//
             Transaction newTransaction = new Transaction(date, time, description, vendor, amount);
             transactions.add(newTransaction);
             addToCSV(newTransaction);
-        }
-        catch (NumberFormatException e) {
-            System.out.println("Enter a valid entry next time" + e.getMessage());
-        }
-        catch (DateTimeException e) {
-            System.out.println("Enter a valid entry next time" + e.getMessage());
+        } catch (Exception e) {
+            System.err.println(e.getMessage());
         }
     }
 
+    public static void Ledger () {
+
+    }
+
+    //region options menu
     public static void addToCSV(Transaction newtransaction) {
         try{
             FileWriter fileWriter = new FileWriter("src/main/resources/transactions.csv", true);
@@ -121,19 +109,45 @@ public class Main {//
         }
     }
 
-    public static String question (int i, String userText) {
-
-        switch (i) {
-            case 1 -> System.out.print("Date (yyyy-MM-dd): ");
-            case 2 -> System.out.print("Time (HH:mm:ss): ");
-            case 3 -> System.out.print("Description: ");
-            case 4 -> System.out.print("Vendor: ");
-            case 5 -> System.out.print("Amount: ");
-            default -> {
-                return "x";
+    public static void questions() {
+        String transactionString = "";
+        for (int i = 0; i < 5; i++) {
+            if (userInput.equalsIgnoreCase("x")) {
+                return;
+            }
+            switch (i) {
+                case 0 -> {
+                    System.out.print("Date (yyyy-MM-dd): ");
+                    userInput = scanner.nextLine();
+                    transactionString += userInput + "|";
+                }
+                case 1 -> {
+                    System.out.print("Time (HH:mm:ss): ");
+                    userInput = scanner.nextLine();
+                    transactionString += userInput + "|";
+                }
+                case 2 -> {
+                    System.out.print("Description: ");
+                    userInput = scanner.nextLine();
+                    transactionString += userInput + "|";
+                }
+                case 3 -> {
+                    System.out.print("Vendor: ");
+                    userInput = scanner.nextLine();
+                    transactionString += userInput + "|";
+                }
+                case 4 -> {
+                    System.out.print("Amount: ");
+                    userInput = scanner.nextLine();
+                    transactionString += userInput + "|";
+                }
+                default -> {
+                    userInput = "x";
+                    break;
+                }
             }
         }
-        return scanner.nextLine().strip();
+        addTransaction(transactionString);
     }//endregion
 
     //region HOME SCREEN METHODS
@@ -212,8 +226,8 @@ public class Main {//
     private static void optionSelect(String userInput) {
 
         switch (userInput.toLowerCase()) {
-            case "d" -> {addTransaction();}
-            case "p" -> {addTransaction();}
+            case "d" -> {questions();}
+            case "p" -> {questions();}
             case "l" -> {}
             case "x" -> {}
             default -> {
