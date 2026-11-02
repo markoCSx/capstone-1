@@ -65,15 +65,15 @@ public class Payment {
         return null;
     }
 
-    public void display(ArrayList<Transaction> transactions, int index) {
-        for (int i = 0; i < this.fields - 1; i++) { //minus 1 cuz indexs start at 0
-            System.out.print(transactions.get(index).fieldString(i));
-            if (transactions.get(index).fieldLength(i) < 10) {
-                for (int j = 0; j == 10 - transactions.get(index).fieldLength(i); j++) {
+    public void display(ArrayList<Payment> payments, int index) {
+        for (int i = 0; i < this.fields; i++) {
+            System.out.print(payments.get(index).fieldString(i));
+            if (payments.get(index).fieldLength(i) < 10 && i >= 2) {
+                for (int j = 0; j < 10 - payments.get(index).fieldLength(i); j++) {
                     System.out.print(" ");
                 }
             }
-            if (i < this.fields - 2) { //1 2 many pipes
+            if (i < this.fields - 1) { //1 2 many pipes
                 System.out.print("|");
             }
         }

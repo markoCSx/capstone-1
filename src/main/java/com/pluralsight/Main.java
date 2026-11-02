@@ -1,5 +1,9 @@
 package com.pluralsight;
 
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.time.DateTimeException;
 import java.time.LocalDate;
 import java.time.LocalTime;
@@ -27,7 +31,18 @@ public class Main {// todo add more comments / have questions pop up on main scr
 
     }
 
-    // todo / maybe change date and time format / x to exit option / make it simpler / check to see if I can put time in deposit / error msg on home screen / clearer error msgs
+    public static void addToCSV(Transaction transaction) {
+        try{
+            FileWriter fileWriter = new FileWriter("src/main/resources/transactions.csv");
+            BufferedWriter bufferedWriter = new BufferedWriter(fileWriter);
+
+
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    //region todo / maybe change date and time format / x to exit option / make it simpler / check to see if I can put time in deposit / error msg on home screen / clearer error msgs
     public static void addDeposit () {
         LocalDate date = LocalDate.parse("0001-01-01");
         LocalTime time = LocalTime.parse("00:00:00");
@@ -49,8 +64,11 @@ public class Main {// todo add more comments / have questions pop up on main scr
                     }
                 }
             }
-            deposits.add(new Deposit(date, time, description, vendor, amount));
-            transactions.add(new Transaction(date, time, description, vendor, amount));
+            Deposit newDeposit = new Deposit(date, time, description, vendor, amount);
+            deposits.add(newDeposit);
+            Transaction newTransaction = new Transaction(date, time, description, vendor, amount);
+            transactions.add(newTransaction);
+            addToCSV(newTransaction);
         }
         catch (NumberFormatException e) {
             System.out.println("Enter a valid entry next time" + e.getMessage());
@@ -75,14 +93,17 @@ public class Main {// todo add more comments / have questions pop up on main scr
                     case 2 -> time = LocalTime.parse(userText);
                     case 3 -> description = userText;
                     case 4 -> vendor = userText;
-                    case 5 -> amount = Double.parseDouble(userText);
+                    case 5 -> amount = Math.sqrt(Double.parseDouble(userText) * Double.parseDouble(userText)) *-1;
                     default -> {
                         break;
                     }
                 }
             }
-            payments.add(new Payment(date, time, description, vendor, amount));
-            transactions.add(new Transaction(date, time, description, vendor, amount));
+            Payment newPayment = new Payment(date, time, description, vendor, amount);
+            payments.add(newPayment);
+            Transaction newTransaction = new Transaction(date, time, description, vendor, amount);
+            transactions.add(newTransaction);
+            addToCSV(newTransaction);
         }
         catch (NumberFormatException e) {
             System.out.println("Enter a valid entry next time" + e.getMessage());
@@ -109,7 +130,7 @@ public class Main {// todo add more comments / have questions pop up on main scr
             }
         }
         return scanner.nextLine().strip();
-    }
+    }//endregion
 
     //region HOME SCREEN METHODS// todo / edit display (undertale theme / smaller) / thread.sleep bug / menu / comments for methods /
     public static void homeScreen () {
