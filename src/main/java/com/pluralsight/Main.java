@@ -1,10 +1,8 @@
 package com.pluralsight;
 
 import java.io.*;
-import java.time.DateTimeException;
 import java.time.LocalDate;
 import java.time.LocalTime;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Scanner;
 import java.util.regex.Pattern;
@@ -38,7 +36,7 @@ public class Main {//
 
         readCSV();
         homeScreen();
-        //System.out.println(transactions.get(0).stringDisplay(transactions, 0));
+
 
     }
 
@@ -47,10 +45,11 @@ public class Main {//
             FileReader fileReader = new FileReader("src/main/resources/transactions.csv");
             BufferedReader bufferedReader = new BufferedReader(fileReader);
 
-            String line = bufferedReader.readLine();
-            while (line != null) {
-                line = bufferedReader.readLine();
-                addTransaction(line);
+
+            bufferedReader.readLine();
+            String line;
+            while ((line = bufferedReader.readLine()) != null) {
+                addTransaction(line, true);
             }
             fileReader.close();
         }
@@ -60,7 +59,7 @@ public class Main {//
 
     }
 
-    public static void addTransaction (String transactionString) {
+    public static void addTransaction (String transactionString, Boolean fromCSV) {
         String[] transactionSplit;
         transactionSplit = transactionString.split(Pattern.quote("|"));
         for (int i = 0; i < transactionSplit.length; i++) {
@@ -86,7 +85,9 @@ public class Main {//
             }
             Transaction newTransaction = new Transaction(date, time, description, vendor, amount);
             transactions.add(newTransaction);
-            addToCSV(newTransaction);
+            if (!fromCSV) {
+                addToCSV(newTransaction);
+            }
         } catch (Exception e) {
             System.err.println(e.getMessage());
         }
@@ -113,6 +114,7 @@ public class Main {//
         String transactionString = "";
         for (int i = 0; i < 5; i++) {
             if (userInput.equalsIgnoreCase("x")) {
+                userInput = "0";
                 return;
             }
             switch (i) {
@@ -143,11 +145,11 @@ public class Main {//
                 }
                 default -> {
                     userInput = "x";
-                    break;
+                    return;
                 }
             }
         }
-        addTransaction(transactionString);
+        addTransaction(transactionString, false);
     }//endregion
 
     //region HOME SCREEN METHODS
@@ -229,9 +231,9 @@ public class Main {//
             case "d" -> {questions();}
             case "p" -> {questions();}
             case "l" -> {}
-            case "x" -> {}
+            case "x" -> {return;}
             default -> {
-                displayHomeScreen();
+                return;
             }
         }
 
