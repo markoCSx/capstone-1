@@ -86,28 +86,43 @@ public class Main {//
             }
             switch (i) {
                 case 0 -> {
-                    System.out.print("Date (yyyy-MM-dd): ");
-                    userInput = scanner.nextLine();
+                    do {
+                        System.out.print("Date (yyyy-MM-dd): ");
+                        userInput = heartMovement2();
+                        displayHomeScreen(displayScreen);
+                    } while (userInput.length() <= 1 && !userInput.equalsIgnoreCase("X"));
                     transactionString += userInput + "|";
                 }
                 case 1 -> {
-                    System.out.print("Time (HH:mm:ss): ");
-                    userInput = scanner.nextLine();
+                    do {
+                        System.out.print("Time (HH:mm:ss): ");
+                        userInput = heartMovement2();
+                        displayHomeScreen(displayScreen);
+                    } while (userInput.length() <= 1 && !userInput.equalsIgnoreCase("X"));
                     transactionString += userInput + "|";
                 }
                 case 2 -> {
-                    System.out.print("Description: ");
-                    userInput = scanner.nextLine();
+                    do {
+                        System.out.print("Description: ");
+                        userInput = heartMovement2();
+                        displayHomeScreen(displayScreen);
+                    } while (userInput.length() <= 1 && !userInput.equalsIgnoreCase("X"));
                     transactionString += userInput + "|";
                 }
                 case 3 -> {
-                    System.out.print("Vendor: ");
-                    userInput = scanner.nextLine();
+                    do {
+                        System.out.print("Vendor: ");
+                        userInput = heartMovement2();
+                        displayHomeScreen(displayScreen);
+                    } while (userInput.length() <= 1 && !userInput.equalsIgnoreCase("X"));
                     transactionString += userInput + "|";
                 }
                 case 4 -> {
-                    System.out.print("Amount: ");
-                    userInput = scanner.nextLine();
+                    do {
+                        System.out.print("Amount: ");
+                        userInput = heartMovement2();
+                        displayHomeScreen(displayScreen);
+                    } while (userInput.length() <= 1 && !userInput.equalsIgnoreCase("X"));
                     transactionString += userInput + "|";
                 }
                 default -> {
@@ -270,6 +285,17 @@ public class Main {//
                 }
             }
         }
+    }
+
+    public static String heartMovement2 () {
+        userInput = scanner.nextLine();
+        switch (userInput.toLowerCase()) {
+            case "t" -> positionX -= 315;
+            case "f" -> positionX -= 6;
+            case "h" -> positionX += 6;
+            case "g" -> positionX += 315;
+        }
+        return userInput;
     }
 
     private static void homeScreenOptions() {
