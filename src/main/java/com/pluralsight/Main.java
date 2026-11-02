@@ -32,8 +32,6 @@ public class Main {//
 
     public static String userInput = "0";
 
-    public static ArrayList<Deposit> deposits = new ArrayList<>();
-    public static ArrayList<Payment> payments = new ArrayList<>();
     public static ArrayList<Transaction> transactions = new ArrayList<>();
 
     public static void main(String[] args) {
@@ -58,11 +56,7 @@ public class Main {//
                 for (int i = 0; i < transactionSplit.length; i++) {
                     transactionSplit[i] = transactionSplit[i].trim();
                 }
-                if (Double.parseDouble(transactionSplit[transactionSplit.length - 1]) > 0) {
-                    addDeposit(transactionSplit);
-                } else {
-                    makePayment(transactionSplit);
-                }
+                    addTransaction(transactionSplit);
             }
             fileReader.close();
         }
@@ -72,11 +66,7 @@ public class Main {//
 
     }
 
-    public static void addDeposit (String[] depositSplit) {
-
-    }
-
-    public static void makePayment (String[] depositSplit) {
+    public static void addTransaction (String[] depositSplit) {
 
     }
 
@@ -86,7 +76,7 @@ public class Main {//
 
 
     //region options menu
-    public static void addDeposit () {
+    public static void addTransaction () {
         LocalDate date = LocalDate.parse("0001-01-01");
         LocalTime time = LocalTime.parse("00:00:00");
         String userText = "0";
@@ -107,43 +97,6 @@ public class Main {//
                     }
                 }
             }
-            Deposit newDeposit = new Deposit(date, time, description, vendor, amount);
-            deposits.add(newDeposit);
-            Transaction newTransaction = new Transaction(date, time, description, vendor, amount);
-            transactions.add(newTransaction);
-            addToCSV(newTransaction);
-        }
-        catch (NumberFormatException e) {
-            System.out.println("Enter a valid entry next time" + e.getMessage());
-        }
-        catch (DateTimeException e) {
-            System.out.println("Enter a valid entry next time" + e.getMessage());
-        }
-    }
-
-    public static void makePayment () {
-        LocalDate date = LocalDate.parse("0001-01-01");
-        LocalTime time = LocalTime.parse("00:00:00");
-        String userText = "0";
-        String description = "N/A";
-        String vendor = "N/A";
-        double amount = 0;
-        try {
-            for (int i = 1; !userText.equalsIgnoreCase("x"); i++) {
-                userText = question(i, userText);
-                switch (i) {
-                    case 1 -> date = LocalDate.parse(userText);
-                    case 2 -> time = LocalTime.parse(userText);
-                    case 3 -> description = userText;
-                    case 4 -> vendor = userText;
-                    case 5 -> amount = Math.sqrt(Double.parseDouble(userText) * Double.parseDouble(userText)) *-1; //MATH.ABS
-                    default -> {
-                        break;
-                    }
-                }
-            }
-            Payment newPayment = new Payment(date, time, description, vendor, amount);
-            payments.add(newPayment);
             Transaction newTransaction = new Transaction(date, time, description, vendor, amount);
             transactions.add(newTransaction);
             addToCSV(newTransaction);
@@ -259,8 +212,8 @@ public class Main {//
     private static void optionSelect(String userInput) {
 
         switch (userInput.toLowerCase()) {
-            case "d" -> {addDeposit();}
-            case "p" -> {makePayment();}
+            case "d" -> {addTransaction();}
+            case "p" -> {addTransaction();}
             case "l" -> {}
             case "x" -> {}
             default -> {

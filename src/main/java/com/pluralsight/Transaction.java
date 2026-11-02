@@ -7,7 +7,7 @@ import java.util.ArrayList;
 
 public class Transaction {
 
-    private final int fieldWidth = 5; //
+    private final int fields = 5; //How many fields in Transaction.java
     private LocalDate date;
     private LocalTime time;
     private String description;
@@ -74,12 +74,12 @@ public class Transaction {
 
     public String stringDisplay(ArrayList<Transaction> transactions, int index) {
         String stringDisplay = "";
-        for (int i = 0; i < this.fieldWidth; i++) {
+        for (int i = 0; i < this.fields; i++) {
             stringDisplay += transactions.get(index).fieldString(i);
             for (int j = 0; j < 11 - transactions.get(index).fieldLength(i); j++) {
                 stringDisplay += " ";
             }
-            if (i < this.fieldWidth - 1) { //1 2 many pipes
+            if (i < this.fields - 1) { //1 2 many pipes
                 stringDisplay += "|";
             }
         }
