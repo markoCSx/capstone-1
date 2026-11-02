@@ -27,16 +27,17 @@ public class Main {// todo add more comments / have questions pop up on main scr
     public static void main(String[] args) { // todo / bank, shops, phone / better ui / maybe find a better way to display screen
 
         homeScreen();
-        transactions.get(0).display(transactions, 0);
+        System.out.println(transactions.get(0).stringDisplay(transactions, 0));
 
     }
 
-    public static void addToCSV(Transaction transaction) {
+    public static void addToCSV(Transaction newtransaction) {
         try{
             FileWriter fileWriter = new FileWriter("src/main/resources/transactions.csv");
             BufferedWriter bufferedWriter = new BufferedWriter(fileWriter);
 
-
+            bufferedWriter.write(newtransaction.stringDisplay(transactions, transactions.size() - 1));
+            bufferedWriter.close();
         } catch (IOException e) {
             throw new RuntimeException(e);
         }

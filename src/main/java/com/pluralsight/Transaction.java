@@ -65,18 +65,20 @@ public class Transaction {
         return null;
     }
 
-    public void display(ArrayList<Transaction> transactions, int index) {
+    public String stringDisplay(ArrayList<Transaction> transactions, int index) {
+        String stringDisplay = "";
         for (int i = 0; i < this.fields; i++) {
-            System.out.print(transactions.get(index).fieldString(i));
+            stringDisplay += transactions.get(index).fieldString(i);
             if (transactions.get(index).fieldLength(i) < 10 && i >= 2) {
                 for (int j = 0; j < 10 - transactions.get(index).fieldLength(i); j++) {
-                    System.out.print(" ");
+                    stringDisplay += " ";
                 }
             }
             if (i < this.fields - 1) { //1 2 many pipes
-                System.out.print("|");
+                stringDisplay += "|";
             }
         }
+        return stringDisplay;
     }
 
     public LocalDate getDate() {
