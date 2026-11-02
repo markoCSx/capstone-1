@@ -69,10 +69,8 @@ public class Payment {
         String stringDisplay = "";
         for (int i = 0; i < this.fields; i++) {
             stringDisplay += payments.get(index).fieldString(i);
-            if (payments.get(index).fieldLength(i) < 10 && i >= 2) {
-                for (int j = 0; j < 10 - payments.get(index).fieldLength(i); j++) {
-                    stringDisplay += " ";
-                }
+            for (int j = 0; j < 11 - payments.get(index).fieldLength(i); j++) {
+                stringDisplay += " ";
             }
             if (i < this.fields - 1) { //1 2 many pipes
                 stringDisplay += "|";

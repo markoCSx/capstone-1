@@ -1,6 +1,5 @@
 package com.pluralsight;
 
-import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -11,7 +10,14 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Scanner;
 
-public class Main {// todo add more comments / have questions pop up on main screen
+/* todo merge deposit and payment
+todo add more comments / have questions pop up on main screen
+todo / bank, shops, phone / better ui / maybe find a better way to display screen
+todo / maybe change date and time format / x to exit option / make it simpler / check to see if I can put time in deposit / error msg on home screen / clearer error msgs
+// todo / edit display (undertale theme / smaller) / thread.sleep bug / menu / comments for methods /
+ */
+
+public class Main {//
 
     public static Scanner scanner = new Scanner(System.in);
 
@@ -24,7 +30,7 @@ public class Main {// todo add more comments / have questions pop up on main scr
     public static ArrayList<Payment> payments = new ArrayList<>();
     public static ArrayList<Transaction> transactions = new ArrayList<>();
 
-    public static void main(String[] args) { // todo / bank, shops, phone / better ui / maybe find a better way to display screen
+    public static void main(String[] args) {
 
         homeScreen();
         //System.out.println(transactions.get(0).stringDisplay(transactions, 0));
@@ -43,7 +49,7 @@ public class Main {// todo add more comments / have questions pop up on main scr
         }
     }
 
-    //region todo / maybe change date and time format / x to exit option / make it simpler / check to see if I can put time in deposit / error msg on home screen / clearer error msgs
+    //region options menu
     public static void addDeposit () {
         LocalDate date = LocalDate.parse("0001-01-01");
         LocalTime time = LocalTime.parse("00:00:00");
@@ -133,7 +139,7 @@ public class Main {// todo add more comments / have questions pop up on main scr
         return scanner.nextLine().strip();
     }//endregion
 
-    //region HOME SCREEN METHODS// todo / edit display (undertale theme / smaller) / thread.sleep bug / menu / comments for methods /
+    //region HOME SCREEN METHODS
     public static void homeScreen () {
 
         do {
@@ -210,7 +216,7 @@ public class Main {// todo add more comments / have questions pop up on main scr
 
         switch (userInput.toLowerCase()) {
             case "d" -> {addDeposit();}
-            case "p" -> {}
+            case "p" -> {makePayment();}
             case "l" -> {}
             case "x" -> {}
             default -> {

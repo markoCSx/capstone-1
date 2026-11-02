@@ -69,10 +69,8 @@ public class Deposit {
         String stringDisplay = "";
         for (int i = 0; i < this.fields; i++) {
             stringDisplay += deposits.get(index).fieldString(i);
-            if (deposits.get(index).fieldLength(i) < 10 && i >= 2) {
-                for (int j = 0; j < 10 - deposits.get(index).fieldLength(i); j++) {
-                    stringDisplay += " ";
-                }
+            for (int j = 0; j < 11 - deposits.get(index).fieldLength(i); j++) {
+                stringDisplay += " ";
             }
             if (i < this.fields - 1) { //1 2 many pipes
                 stringDisplay += "|";
