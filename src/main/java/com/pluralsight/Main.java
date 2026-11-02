@@ -81,6 +81,7 @@ public class Main {//
             if (userInput.equalsIgnoreCase("x")) {
                 userInput = "0";
                 displayScreen = "homescreen";
+                displayHomeScreen(displayScreen);
                 return;
             }
             switch (i) {
@@ -116,6 +117,8 @@ public class Main {//
             }
         }
         addTransaction(transactionString, false);
+        displayScreen = "homescreen";
+        displayHomeScreen(displayScreen);
     }//endregion
     public static void addTransaction (String transactionString, Boolean fromCSV) {
         String[] transactionSplit;
@@ -160,8 +163,8 @@ public class Main {//
             """);
     }
 
-    private static void ledgerOptions() {
-        switch (userInput.toLowerCase()) {
+    private static void ledgerOptions(String userOption) {
+        switch (userOption.toLowerCase()) {
             case "a" -> {}
             case "d" -> {}
             case "p" -> {}
@@ -173,6 +176,7 @@ public class Main {//
             default -> {
                 displayScreen = "homescreen";
                 userInput = "0";
+                displayHomeScreen(displayScreen);
             }
         }
 
@@ -184,6 +188,7 @@ public class Main {//
         do {
 
             displayHomeScreen(displayScreen);
+            heartMovement();
 
         } while (!userInput.equalsIgnoreCase("x"));
 
@@ -235,7 +240,9 @@ public class Main {//
         homeScreenDisplay.delete(positionX - 1, positionX);
         System.out.println(homeScreenDisplay);
         switch (displayScreen) {
-            case "homescreen" -> System.out.println(buttons);
+            case "homescreen" -> {
+                System.out.println(buttons);
+            }
             case "homescreenoptions" -> {
                 questions();
             }
@@ -246,7 +253,6 @@ public class Main {//
                 displayScreen = "homescreen";
             }
         }
-        heartMovement();
     }
 
     public static void heartMovement () {
@@ -259,9 +265,8 @@ public class Main {//
             default -> {
                 if (displayScreen.equals("homescreen")) {
                     homeScreenOptions();
-                }
-                if (displayScreen.equals("ledger")) {
-                    ledgerOptions();
+                } else if (displayScreen.equals("ledgerscreen")) {
+                    ledgerOptions(userInput);
                 }
             }
         }
