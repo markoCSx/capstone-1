@@ -30,6 +30,8 @@ public class Main {//
 
     public static String userInput = "0";
 
+    public static String displayScreen = "homescreen";
+
     public static ArrayList<Transaction> transactions = new ArrayList<>();
 
     public static void main(String[] args) {
@@ -59,45 +61,6 @@ public class Main {//
 
     }
 
-    public static void addTransaction (String transactionString, Boolean fromCSV) {
-        String[] transactionSplit;
-        transactionSplit = transactionString.split(Pattern.quote("|"));
-        for (int i = 0; i < transactionSplit.length; i++) {
-            transactionSplit[i] = transactionSplit[i].trim();
-        }
-        LocalDate date = LocalDate.parse("0001-01-01");
-        LocalTime time = LocalTime.parse("00:00:00");
-        String description = "N/A";
-        String vendor = "N/A";
-        double amount = 0;
-        try {
-            for (int i = 0; i < transactionSplit.length; i++) {
-                switch (i) {
-                    case 0 -> date = LocalDate.parse(transactionSplit[i]);
-                    case 1 -> time = LocalTime.parse(transactionSplit[i]);
-                    case 2 -> description = transactionSplit[i];
-                    case 3 -> vendor = transactionSplit[i];
-                    case 4 -> amount = Double.parseDouble(transactionSplit[i]);
-                    default -> {
-                        break;
-                    }
-                }
-            }
-            Transaction newTransaction = new Transaction(date, time, description, vendor, amount);
-            transactions.add(newTransaction);
-            if (!fromCSV) {
-                addToCSV(newTransaction);
-            }
-        } catch (Exception e) {
-            System.err.println(e.getMessage());
-        }
-    }
-
-    public static void Ledger () {
-
-    }
-
-    //region options menu
     public static void addToCSV(Transaction newtransaction) {
         try{
             FileWriter fileWriter = new FileWriter("src/main/resources/transactions.csv", true);
@@ -110,11 +73,14 @@ public class Main {//
         }
     }
 
+    //region options menu
+
     public static void questions() {
         String transactionString = "";
         for (int i = 0; i < 5; i++) {
             if (userInput.equalsIgnoreCase("x")) {
                 userInput = "0";
+                displayScreen = "homescreen";
                 return;
             }
             switch (i) {
@@ -151,19 +117,79 @@ public class Main {//
         }
         addTransaction(transactionString, false);
     }//endregion
+    public static void addTransaction (String transactionString, Boolean fromCSV) {
+        String[] transactionSplit;
+        transactionSplit = transactionString.split(Pattern.quote("|"));
+        for (int i = 0; i < transactionSplit.length; i++) {
+            transactionSplit[i] = transactionSplit[i].trim();
+        }
+        LocalDate date = LocalDate.parse("0001-01-01");
+        LocalTime time = LocalTime.parse("00:00:00");
+        String description = "N/A";
+        String vendor = "N/A";
+        double amount = 0;
+        try {
+            for (int i = 0; i < transactionSplit.length; i++) {
+                switch (i) {
+                    case 0 -> date = LocalDate.parse(transactionSplit[i]);
+                    case 1 -> time = LocalTime.parse(transactionSplit[i]);
+                    case 2 -> description = transactionSplit[i];
+                    case 3 -> vendor = transactionSplit[i];
+                    case 4 -> amount = Double.parseDouble(transactionSplit[i]);
+                    default -> {
+                        break;
+                    }
+                }
+            }
+            Transaction newTransaction = new Transaction(date, time, description, vendor, amount);
+            transactions.add(newTransaction);
+            if (!fromCSV) {
+                addToCSV(newTransaction);
+            }
+        } catch (Exception e) {
+            System.err.println(e.getMessage());
+        }
+    }
+
+    public static void ledgerScreen() {
+        System.out.println("""
+            A) All - Display all entries
+            D) Deposits - Display only the entries that are deposits into the account
+            P) Payments - Display only the negative entries (or payments)
+            R) Reports - A new screen that allows the user to run pre-defined reports or to run a custom search
+            """);
+    }
+
+    private static void ledgerOptions() {
+        switch (userInput.toLowerCase()) {
+            case "a" -> {}
+            case "d" -> {}
+            case "p" -> {}
+            case "r" -> {}
+            case "x" -> {
+                displayScreen = "homescreen";
+                userInput = "0";
+            }
+            default -> {
+                displayScreen = "homescreen";
+                userInput = "0";
+            }
+        }
+
+    }
 
     //region HOME SCREEN METHODS
     public static void homeScreen () {
 
         do {
 
-            displayHomeScreen();
+            displayHomeScreen(displayScreen);
 
         } while (!userInput.equalsIgnoreCase("x"));
 
     }
 
-    public static void displayHomeScreen() {
+    public static void displayHomeScreen(String screen) {
         StringBuilder homeScreenDisplay = new StringBuilder("""
                 
                 1                   ██╗  ██╗    ████████╗ ██████╗     ███████╗██╗  ██╗██╗████████╗                     |
@@ -208,7 +234,18 @@ public class Main {//
         homeScreenDisplay.replace(positionX, positionX + 1, "❤️");
         homeScreenDisplay.delete(positionX - 1, positionX);
         System.out.println(homeScreenDisplay);
-        System.out.println(buttons);
+        switch (displayScreen) {
+            case "homescreen" -> System.out.println(buttons);
+            case "homescreenoptions" -> {
+                questions();
+            }
+            case "ledgerscreen" -> {
+                ledgerScreen();
+            }
+            default -> {
+                displayScreen = "homescreen";
+            }
+        }
         heartMovement();
     }
 
@@ -220,18 +257,26 @@ public class Main {//
             case "h" -> positionX += 6;
             case "g" -> positionX += 315;
             default -> {
-                optionSelect(userInput);
+                if (displayScreen.equals("homescreen")) {
+                    homeScreenOptions();
+                }
+                if (displayScreen.equals("ledger")) {
+                    ledgerOptions();
+                }
             }
         }
     }
 
-    private static void optionSelect(String userInput) {
+    private static void homeScreenOptions() {
 
         switch (userInput.toLowerCase()) {
-            case "d" -> {questions();}
-            case "p" -> {questions();}
-            case "l" -> {}
-            case "x" -> {return;}
+            case "d" -> displayScreen = "homescreenoptions";
+            case "p" -> displayScreen = "homescreenoptions";
+            case "l" -> displayScreen = "ledgerscreen";
+            case "x" -> {
+                displayScreen = "homescreen";
+                return;
+            }
             default -> {
                 return;
             }
