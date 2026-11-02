@@ -10,6 +10,8 @@ import java.util.Scanner;
 import java.util.regex.Pattern;
 
 /* todo merge deposit and payment!!!!!!!!!!
+todo read .csv -> deposit/payment
+
 
 todo have heartMovement always being checked for and homescreen
 
@@ -134,7 +136,7 @@ public class Main {//
                     case 2 -> time = LocalTime.parse(userText);
                     case 3 -> description = userText;
                     case 4 -> vendor = userText;
-                    case 5 -> amount = Math.sqrt(Double.parseDouble(userText) * Double.parseDouble(userText)) *-1;
+                    case 5 -> amount = Math.sqrt(Double.parseDouble(userText) * Double.parseDouble(userText)) *-1; //MATH.ABS
                     default -> {
                         break;
                     }
