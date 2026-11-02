@@ -1,20 +1,24 @@
 package com.pluralsight;
 
-import java.io.BufferedWriter;
-import java.io.FileWriter;
-import java.io.IOException;
+import java.io.*;
 import java.time.DateTimeException;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Scanner;
+import java.util.regex.Pattern;
 
-/* todo merge deposit and payment
+/* todo merge deposit and payment!!!!!!!!!!
+
+todo have heartMovement always being checked for and homescreen
+
+
 todo add more comments / have questions pop up on main screen
 todo / bank, shops, phone / better ui / maybe find a better way to display screen
 todo / maybe change date and time format / x to exit option / make it simpler / check to see if I can put time in deposit / error msg on home screen / clearer error msgs
-// todo / edit display (undertale theme / smaller) / thread.sleep bug / menu / comments for methods /
+ todo / edit display (undertale theme / smaller) / thread.sleep bug / menu / comments for methods /
+todo have screen being displayed during answering
  */
 
 public class Main {//
@@ -32,22 +36,52 @@ public class Main {//
 
     public static void main(String[] args) {
 
+        readCSV();
         homeScreen();
         //System.out.println(transactions.get(0).stringDisplay(transactions, 0));
 
     }
 
-    public static void addToCSV(Transaction newtransaction) {
+    public static void readCSV () {
         try{
-            FileWriter fileWriter = new FileWriter("src/main/resources/transactions.csv", true);
-            BufferedWriter bufferedWriter = new BufferedWriter(fileWriter);
+            FileReader fileReader = new FileReader("src/main/resources/transactions.csv");
+            BufferedReader bufferedReader = new BufferedReader(fileReader);
 
-            bufferedWriter.write("\n" + newtransaction.stringDisplay(transactions, transactions.size() - 1));
-            bufferedWriter.close();
-        } catch (IOException e) {
-            throw new RuntimeException(e);
+            String[] transactionSplit;
+
+            String line = bufferedReader.readLine();
+            while (line != null) {
+                line = bufferedReader.readLine();
+                transactionSplit = line.split(Pattern.quote("|"));
+                for (int i = 0; i < transactionSplit.length; i++) {
+                    transactionSplit[i] = transactionSplit[i].trim();
+                }
+                if (Double.parseDouble(transactionSplit[transactionSplit.length - 1]) > 0) {
+                    addDeposit(transactionSplit);
+                } else {
+                    makePayment(transactionSplit);
+                }
+            }
+            fileReader.close();
         }
+        catch (Exception e) {
+            System.err.println("Restart Application .csv file unable to be read");;
+        }
+
     }
+
+    public static void addDeposit (String[] depositSplit) {
+
+    }
+
+    public static void makePayment (String[] depositSplit) {
+
+    }
+
+    public static void Ledger () {
+
+    }
+
 
     //region options menu
     public static void addDeposit () {
@@ -120,8 +154,16 @@ public class Main {//
         }
     }
 
-    public static void Ledger () {
+    public static void addToCSV(Transaction newtransaction) {
+        try{
+            FileWriter fileWriter = new FileWriter("src/main/resources/transactions.csv", true);
+            BufferedWriter bufferedWriter = new BufferedWriter(fileWriter);
 
+            bufferedWriter.write("\n" + newtransaction.stringDisplay(transactions, transactions.size() - 1));
+            bufferedWriter.close();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     public static String question (int i, String userText) {
