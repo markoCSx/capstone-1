@@ -24,6 +24,8 @@ todo have screen being displayed during answering
 
 public class Main {
 
+    //region Global Variables
+
     public static Scanner scanner = new Scanner(System.in);
 
     public static int positionX = 2572;
@@ -35,13 +37,18 @@ public class Main {
 
     public static ArrayList<Transaction> transactions = new ArrayList<>();
 
+    //endregion
+
     public static void main(String[] args) {
 
         readCSV();
         homeScreen();
+        scanner.close();
 
 
     }
+
+    //region read/write CSV
 
     public static void readCSV () {
         try{
@@ -74,73 +81,6 @@ public class Main {
         }
     }
 
-    //region options menu
-
-    public static void questions() {
-        String transactionString = "";
-        displayHomeScreen();
-        for (int i = 0; i < 5; i++) {
-            if (userInput.equalsIgnoreCase("x")) {
-                userInput = "0";
-                displayScreen = "homescreen";
-                displayHomeScreen();
-                return;
-            }
-            if (displayScreen.equals("questions")) {
-                switch (i) {
-                    case 0 -> {
-                        do {
-                            System.out.print("Date (yyyy-MM-dd): ");
-                            heartMovement();
-                            displayHomeScreen();
-                        } while (userInput.length() == 1 && !userInput.equalsIgnoreCase("x") && displayScreen.equals("questions"));
-                        transactionString += userInput + "|";
-                    }
-                    case 1 -> {
-                        do {
-                            System.out.print("Time (HH:mm:ss): ");
-                            heartMovement();
-                            displayHomeScreen();
-                        } while (userInput.length() == 1 && !userInput.equalsIgnoreCase("x"));
-                        transactionString += userInput + "|";
-                    }
-                    case 2 -> {
-                        do {
-                            System.out.print("Description: ");
-                            heartMovement();
-                            displayHomeScreen();
-                        } while (userInput.length() == 1 && !userInput.equalsIgnoreCase("x"));
-                        transactionString += userInput + "|";
-                    }
-                    case 3 -> {
-                        do {
-                            System.out.print("Vendor: ");
-                            heartMovement();
-                            displayHomeScreen();
-                        } while (userInput.length() == 1 && !userInput.equalsIgnoreCase("x"));
-                        transactionString += userInput + "|";
-                    }
-                    case 4 -> {
-                        do {
-                            System.out.print("Amount: ");
-                            heartMovement();
-                            displayHomeScreen();
-                        } while (userInput.length() == 1 && !userInput.equalsIgnoreCase("x"));
-                        transactionString += userInput + "|";
-                    }
-                    default -> {
-                        userInput = "x";
-                        return;
-                    }
-                }
-            } else {
-                return;
-            }
-        }
-        addTransaction(transactionString, false);
-        displayScreen = "homescreen";
-        displayHomeScreen();
-    }//endregion
     public static void addTransaction (String transactionString, Boolean fromCSV) {
         String[] transactionSplit;
         transactionSplit = transactionString.split(Pattern.quote("|"));
@@ -175,6 +115,11 @@ public class Main {
         }
     }
 
+    //endregion
+
+
+    //region PRINT TO SCREEN - SCREENS
+
     public static String ledgerScreen() {
         return "7          A) Display all entries D) Display Deposits P) Display Payments R) Custom search             |";
     }
@@ -183,6 +128,8 @@ public class Main {
         return "7                    D) Add Deposit    P) Make Payment (Debit)    L) Ledger                            |";
     }
 
+    //endregion
+
     //region HOME SCREEN METHODS
 
     public static void homeScreen () {
@@ -190,14 +137,15 @@ public class Main {
         do {
 
             displayHomeScreen();
-            heartMovement();
+            keyboardInputs();
 
         } while (!userInput.equalsIgnoreCase("x"));
 
     }
+
     public static void displayHomeScreen() {
         StringBuilder homeScreenDisplay = new StringBuilder("""
-                
+
                 1                   ██╗  ██╗    ████████╗ ██████╗     ███████╗██╗  ██╗██╗████████╗                     |
                 2                   ╚██╗██╔╝    ╚══██╔══╝██╔═══██╗    ██╔════╝╚██╗██╔╝██║╚══██╔══╝                     |
                 3                    ╚███╔╝        ██║   ██║   ██║    █████╗   ╚███╔╝ ██║   ██║                        |
@@ -243,18 +191,24 @@ public class Main {
         switch (displayScreen) {
             case "homescreen" -> {
                 homeScreenDisplay.replace(105 * 6 + 1, 105 * 6 + 1 + homeScreenOptionsDisplay().length(), homeScreenOptionsDisplay());
+                homeScreenDisplay.replace(positionX, positionX + 1, "❤️");
+                homeScreenDisplay.delete(positionX - 1, positionX);
                 System.out.println(homeScreenDisplay);
                 System.out.println(buttons);
             }
             case "homescreenoptions" -> {
-                displayScreen = "questions";
-                questions();
+                displayScreen = "transactionQuestions";
+                transactionQuestions();
             }
             case "ledgerscreen" -> {
                 homeScreenDisplay.replace(105* 6 +1, 105 * 6 +1 + ledgerScreen().length(), ledgerScreen());
+                homeScreenDisplay.replace(positionX, positionX + 1, "❤️");
+                homeScreenDisplay.delete(positionX - 1, positionX);
                 System.out.println(homeScreenDisplay);
             }
-            case "questions" -> {
+            case "transactionQuestions" -> {
+                homeScreenDisplay.replace(positionX, positionX + 1, "❤️");
+                homeScreenDisplay.delete(positionX - 1, positionX);
                 System.out.println(homeScreenDisplay);
             }
             default -> {
@@ -264,7 +218,11 @@ public class Main {
 
     }
 
-    public static void heartMovement () {
+    //endregion
+
+    //region OPTION SELECT METHODS
+
+    public static void keyboardInputs() {
         userInput = scanner.nextLine();
         switch (userInput.toLowerCase()) {
             case "t" -> positionX -= 315;
@@ -272,7 +230,7 @@ public class Main {
             case "h" -> positionX += 6;
             case "g" -> positionX += 315;
             default -> {
-                if (displayScreen.equals("homescreen") || displayScreen.equals("questions")) {
+                if (displayScreen.equals("homescreen") || displayScreen.equals("transactionQuestions")) {
                     homeScreenOptions();
                 } else if (displayScreen.equals("ledgerscreen")) {
                     ledgerOptions();
@@ -309,5 +267,72 @@ public class Main {
         }
 
     }
+
     //endregion
+
+    public static void transactionQuestions() {
+        String transactionString = "";
+        displayHomeScreen();
+        for (int i = 0; i < 5; i++) {
+            if (userInput.equalsIgnoreCase("x")) {
+                userInput = "0";
+                displayScreen = "homescreen";
+                displayHomeScreen();
+                return;
+            }
+            if (displayScreen.equals("transactionQuestions")) {
+                switch (i) {
+                    case 0 -> {
+                        do {
+                            System.out.print("Date (yyyy-MM-dd): ");
+                            keyboardInputs();
+                            displayHomeScreen();
+                        } while (userInput.length() == 1 && !userInput.equalsIgnoreCase("x") && displayScreen.equals("transactionQuestions"));
+                        transactionString += userInput + "|";
+                    }
+                    case 1 -> {
+                        do {
+                            System.out.print("Time (HH:mm:ss): ");
+                            keyboardInputs();
+                            displayHomeScreen();
+                        } while (userInput.length() == 1 && !userInput.equalsIgnoreCase("x") && displayScreen.equals("transactionQuestions"));
+                        transactionString += userInput + "|";
+                    }
+                    case 2 -> {
+                        do {
+                            System.out.print("Description: ");
+                            keyboardInputs();
+                            displayHomeScreen();
+                        } while (userInput.length() == 1 && !userInput.equalsIgnoreCase("x") && displayScreen.equals("transactionQuestions"));
+                        transactionString += userInput + "|";
+                    }
+                    case 3 -> {
+                        do {
+                            System.out.print("Vendor: ");
+                            keyboardInputs();
+                            displayHomeScreen();
+                        } while (userInput.length() == 1 && !userInput.equalsIgnoreCase("x") && displayScreen.equals("transactionQuestions"));
+                        transactionString += userInput + "|";
+                    }
+                    case 4 -> {
+                        do {
+                            System.out.print("Amount: ");
+                            keyboardInputs();
+                            displayHomeScreen();
+                        } while (userInput.length() == 1 && !userInput.equalsIgnoreCase("x") && displayScreen.equals("transactionQuestions"));
+                        transactionString += userInput + "|";
+                    }
+                    default -> {
+                        userInput = "x";
+                        return;
+                    }
+                }
+            } else {
+                return;
+            }
+        }
+        addTransaction(transactionString, false);
+        displayScreen = "homescreen";
+        displayHomeScreen();
+    }
 }
