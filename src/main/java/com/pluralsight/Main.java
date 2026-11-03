@@ -188,15 +188,11 @@ public class Main {
 
         switch (displayScreen) {
             case "homescreen" -> {
-                homeScreenDisplay.replace(105 * 6 + 1, 105 * 6 + 1 + homeScreenOptionsDisplay().length(), homeScreenOptionsDisplay());
+                //homeScreenDisplay.replace(105 * 6 + 1, 105 * 6 + 1 + homeScreenOptionsDisplay().length(), homeScreenOptionsDisplay());
                 homeScreenDisplay.replace(positionX, positionX + 1, "❤️");
                 homeScreenDisplay.delete(positionX - 1, positionX);
                 System.out.println(homeScreenDisplay);
                 System.out.println(buttons);
-            }
-            case "homescreenoptions" -> {
-                displayScreen = "transactionQuestions";
-                transactionQuestions();
             }
             case "ledgerscreen" -> {
                 homeScreenDisplay.replace(105* 6 +1, 105 * 6 +1 + ledgerScreen().length(), ledgerScreen());
@@ -205,6 +201,11 @@ public class Main {
                 System.out.println(homeScreenDisplay);
             }
             case "transactionQuestions" -> {
+                homeScreenDisplay.replace(positionX, positionX + 1, "❤️");
+                homeScreenDisplay.delete(positionX - 1, positionX);
+                System.out.println(homeScreenDisplay);
+            }
+            case "ledgerReportsScreen" -> {
                 homeScreenDisplay.replace(positionX, positionX + 1, "❤️");
                 homeScreenDisplay.delete(positionX - 1, positionX);
                 System.out.println(homeScreenDisplay);
@@ -219,7 +220,6 @@ public class Main {
     //endregion
 
     //region OPTION SELECT METHODS
-
     public static void keyboardInputs() {
         userInput = scanner.nextLine();
         switch (userInput.toLowerCase()) {
@@ -256,8 +256,8 @@ public class Main {
     private static void homeScreenOptions() {
 
         switch (userInput.toLowerCase()) {
-            case "d" -> displayScreen = "homescreenoptions";
-            case "p" -> displayScreen = "homescreenoptions";
+            case "d" -> transactionQuestions();
+            case "p" -> transactionQuestions();
             case "l" -> displayScreen = "ledgerscreen";
             default -> {
                 return;
@@ -265,10 +265,10 @@ public class Main {
         }
 
     }
-
     //endregion
 
     public static void transactionQuestions() {
+        displayScreen = "transactionQuestions";
         String transactionString = "";
         displayHomeScreen();
         for (int i = 0; i < 5; i++) {
