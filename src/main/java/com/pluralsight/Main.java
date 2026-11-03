@@ -239,9 +239,9 @@ public class Main {
 
     private static void ledgerOptions() {
         switch (userInput.toLowerCase()) {
-            case "a" -> {displayAll();}
-            case "d" -> {}
-            case "p" -> {}
+            case "a" -> {displayDeposits("all");}
+            case "d" -> {displayDeposits("deposits");}
+            case "p" -> {displayDeposits("payments");}
             case "r" -> {}
             case "x" -> {
                 displayScreen = "homescreen";
@@ -334,7 +334,7 @@ public class Main {
         displayHomeScreen();
     }
 
-    public static void displayAll() {
+    public static void displayDeposits(String displayOption) {
         for (int i = 0; i < 10; i++) {
             System.out.println("\n");
         }
@@ -346,11 +346,28 @@ public class Main {
                 5                   ██╔╝ ██╗       ██║   ╚██████╔╝    ███████╗██╔╝ ██╗██║   ██║                        |
                 6                   ╚═╝  ╚═╝       ╚═╝    ╚═════╝     ╚══════╝╚═╝  ╚═╝╚═╝   ╚═╝                        |""");
         for (int i = transactions.size() - 1; i >= 0; i--) {
-            System.out.println(transactions.get(i).stringDisplay(transactions, i));
+            switch (displayOption) {
+                case "all" -> System.out.println(transactions.get(i).stringDisplay(transactions, i));
+                case "deposits" -> {
+                    if (!transactions.get(i).isPayment()) {
+                        System.out.println(transactions.get(i).stringDisplay(transactions, i));
+                    }
+                }
+                case "payments" -> {
+                    if (transactions.get(i).isPayment()) {
+                        System.out.println(transactions.get(i).stringDisplay(transactions, i));
+                    }
+                }
+                default -> {
+                    return;
+                }
+            }
         }
         do {
             userInput = scanner.nextLine();
         } while (!userInput.equalsIgnoreCase("x"));
         userInput = "0";
     }
+
+
 }
