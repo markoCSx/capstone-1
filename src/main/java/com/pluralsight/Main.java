@@ -176,7 +176,11 @@ public class Main {
     }
 
     public static String ledgerScreen() {
-        return "A) Display all entries D) Display Deposits P) Display Payments R) Custom search";
+        return "7          A) Display all entries D) Display Deposits P) Display Payments R) Custom search             |";
+    }
+
+    public static String homeScreenOptionsDisplay() {
+        return "7                    D) Add Deposit    P) Make Payment (Debit)    L) Ledger                            |";
     }
 
     //region HOME SCREEN METHODS
@@ -236,9 +240,10 @@ public class Main {
         homeScreenDisplay.replace(positionX, positionX + 1, "❤️");
         homeScreenDisplay.delete(positionX - 1, positionX);
 
-        System.out.println(homeScreenDisplay);
         switch (displayScreen) {
             case "homescreen" -> {
+                homeScreenDisplay.replace(105 * 6 + 1, 105 * 6 + 1 + homeScreenOptionsDisplay().length(), homeScreenOptionsDisplay());
+                System.out.println(homeScreenDisplay);
                 System.out.println(buttons);
             }
             case "homescreenoptions" -> {
@@ -246,7 +251,10 @@ public class Main {
                 questions();
             }
             case "ledgerscreen" -> {
-                homeScreenDisplay.replace(105*6 + 12, 105*6 + 12 + ledgerScreen().length(), ledgerScreen());
+                homeScreenDisplay.replace(105* 6 +1, 105 * 6 +1 + ledgerScreen().length(), ledgerScreen());
+                System.out.println(homeScreenDisplay);
+            }
+            case "questions" -> {
                 System.out.println(homeScreenDisplay);
             }
             default -> {
