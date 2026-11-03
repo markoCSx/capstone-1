@@ -126,6 +126,10 @@ public class Main {
         return "7                    D) Add Deposit    P) Make Payment (Debit)    L) Ledger                            |";
     }
 
+    public static String ledgerReportsScreen() {
+        return "7       1) Month To Date 2) Previous Month 3) Year To Date 4) Previous Year  5) Search by Vendor       |";
+    }
+
     //endregion
 
     //region HOME SCREEN METHODS
@@ -206,6 +210,7 @@ public class Main {
                 System.out.println(homeScreenDisplay);
             }
             case "ledgerReportsScreen" -> {
+                homeScreenDisplay.replace(105* 6 +1, 105 * 6 +1 + ledgerReportsScreen().length(), ledgerReportsScreen());
                 homeScreenDisplay.replace(positionX, positionX + 1, "❤️");
                 homeScreenDisplay.delete(positionX - 1, positionX);
                 System.out.println(homeScreenDisplay);
@@ -242,7 +247,7 @@ public class Main {
             case "a" -> {displayDeposits("all");}
             case "d" -> {displayDeposits("deposits");}
             case "p" -> {displayDeposits("payments");}
-            case "r" -> {}
+            case "r" -> {displayScreen= "ledgerReportsScreen";}
             case "x" -> {
                 displayScreen = "homescreen";
                 userInput = "0";
