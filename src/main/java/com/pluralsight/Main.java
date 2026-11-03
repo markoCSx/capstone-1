@@ -45,7 +45,6 @@ public class Main {
         homeScreen();
         scanner.close();
 
-
     }
 
     //region read/write CSV
@@ -116,7 +115,6 @@ public class Main {
     }
 
     //endregion
-
 
     //region PRINT TO SCREEN - SCREENS
 
@@ -241,7 +239,7 @@ public class Main {
 
     private static void ledgerOptions() {
         switch (userInput.toLowerCase()) {
-            case "a" -> {}
+            case "a" -> {displayAll();}
             case "d" -> {}
             case "p" -> {}
             case "r" -> {}
@@ -334,5 +332,25 @@ public class Main {
         addTransaction(transactionString, false);
         displayScreen = "homescreen";
         displayHomeScreen();
+    }
+
+    public static void displayAll() {
+        for (int i = 0; i < 10; i++) {
+            System.out.println("\n");
+        }
+        System.out.println("""
+                1                   ██╗  ██╗    ████████╗ ██████╗     ███████╗██╗  ██╗██╗████████╗                     |
+                2                   ╚██╗██╔╝    ╚══██╔══╝██╔═══██╗    ██╔════╝╚██╗██╔╝██║╚══██╔══╝                     |
+                3                    ╚███╔╝        ██║   ██║   ██║    █████╗   ╚███╔╝ ██║   ██║                        |
+                4                    ██╔██╗        ██║   ██║   ██║    ██╔══╝   ██╔██╗ ██║   ██║                        |
+                5                   ██╔╝ ██╗       ██║   ╚██████╔╝    ███████╗██╔╝ ██╗██║   ██║                        |
+                6                   ╚═╝  ╚═╝       ╚═╝    ╚═════╝     ╚══════╝╚═╝  ╚═╝╚═╝   ╚═╝                        |""");
+        for (int i = transactions.size() - 1; i >= 0; i--) {
+            System.out.println(transactions.get(i).stringDisplay(transactions, i));
+        }
+        do {
+            userInput = scanner.nextLine();
+        } while (!userInput.equalsIgnoreCase("x"));
+        userInput = "0";
     }
 }
