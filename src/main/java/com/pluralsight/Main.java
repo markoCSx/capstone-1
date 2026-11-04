@@ -43,7 +43,6 @@ public class Main {
 
         readCSV();
         homeScreen();
-        dateReports();
         scanner.close();
 
     }
@@ -266,27 +265,16 @@ public class Main {
 
     private static void ledgersReportOptions() {
         switch (userInput.toLowerCase()) {
-            case "1" -> {
-                displayTransactions("monthToDate");}
-            case "2" -> {
-                displayTransactions("previousMonth");}
-            case "3" -> {
-                displayTransactions("payments");}
-            case "4" -> {displayScreen= "ledgerReportsScreen";}
-            case "5" -> {}
+            case "1" -> {displayTransactions("monthToDate");}
+            case "2" -> {displayTransactions("previousMonth");}
+            case "3" -> {displayTransactions("yearToDate");}
+            case "4" -> {displayTransactions("previousYear");}
+            case "5" -> {displayTransactions("searchByVendor");}
             case "x" -> {
                 displayScreen = "ledgerscreen";
                 userInput = "0";
             }
             default -> {
-            }
-        }
-    }
-
-    public static void dateReports() {
-        for (int i = 0; i < transactions.size(); i++) {
-            if (transactions.get(i).getDate().isEqual(LocalDate.now().withDayOfMonth(1)) || transactions.get(i).getDate().isAfter(LocalDate.now().withDayOfMonth(1))) {
-                System.out.println(transactions.get(i).stringDisplay(transactions, i));
             }
         }
     }
@@ -373,16 +361,19 @@ public class Main {
     }
 
     public static void displayTransactions(String displayOption) {
-        for (int i = 0; i < 10; i++) {
-            System.out.println("\n");
+        StringBuilder clearScreen = new StringBuilder();
+        for (int i = 0; i < 25; i++) {
+            clearScreen.append("\n");
         }
-        System.out.println("""
+        System.out.println(clearScreen);
+        StringBuilder exit = new StringBuilder("""
                 1                   ██╗  ██╗    ████████╗ ██████╗     ███████╗██╗  ██╗██╗████████╗                     |
                 2                   ╚██╗██╔╝    ╚══██╔══╝██╔═══██╗    ██╔════╝╚██╗██╔╝██║╚══██╔══╝                     |
                 3                    ╚███╔╝        ██║   ██║   ██║    █████╗   ╚███╔╝ ██║   ██║                        |
                 4                    ██╔██╗        ██║   ██║   ██║    ██╔══╝   ██╔██╗ ██║   ██║                        |
                 5                   ██╔╝ ██╗       ██║   ╚██████╔╝    ███████╗██╔╝ ██╗██║   ██║                        |
                 6                   ╚═╝  ╚═╝       ╚═╝    ╚═════╝     ╚══════╝╚═╝  ╚═╝╚═╝   ╚═╝                        |""");
+        System.out.println(exit);
         for (int i = transactions.size() - 1; i >= 0; i--) {
             switch (displayOption) {
                 case "all" -> System.out.println(transactions.get(i).stringDisplay(transactions, i));
@@ -406,8 +397,33 @@ public class Main {
                         System.out.println(transactions.get(i).stringDisplay(transactions, i));
                     }
                 }
-                default -> {
+                case "yearToNow" -> {
+                    if (transactions.get(i).getDate().isEqual(LocalDate.now().withDayOfYear(1)) || transactions.get(i).getDate().isAfter(LocalDate.now().withDayOfYear(1))) {
+                        System.out.println(transactions.get(i).stringDisplay(transactions, i));
+                    }
+                }
+                case "previousYear" -> {
+                    if (transactions.get(i).getDate().isEqual(LocalDate.now().minusYears(1).withDayOfYear(1)) || transactions.get(i).getDate().isAfter(LocalDate.now().minusYears(1).withDayOfYear(1)) && transactions.get(i).getDate().isBefore(LocalDate.now().withDayOfYear(1))) {
+                        System.out.println(transactions.get(i).stringDisplay(transactions, i));
+                    }
+                }
+                case "searchByVendor" -> {
+                    do {
+                        System.out.print("Enter Vendor Name: ");
+                        userInput = scanner.nextLine().trim().strip().toLowerCase();
+                        System.out.println(clearScreen);
+                        System.out.println(exit);
+                        for (int j = 0; j < transactions.size(); j++) {
+                            if (transactions.get(j).getVendor().equalsIgnoreCase(userInput)) {
+                                System.out.println(transactions.get(j).stringDisplay(transactions, j));
+                            }
+                        }
+                    } while (!userInput.equalsIgnoreCase("x"));
+                    userInput = "0";
                     return;
+                }
+                default -> {
+                    break;
                 }
             }
         }
