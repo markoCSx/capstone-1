@@ -76,8 +76,10 @@ public class Transaction {
         String stringDisplay = "";
         for (int i = 0; i < this.fields; i++) {
             stringDisplay += transactions.get(index).fieldString(i);
-            for (int j = 0; j < 11 - transactions.get(index).fieldLength(i); j++) {
-                stringDisplay += " ";
+            if (i > 1) {
+                for (int j = 0; j < 20 - transactions.get(index).fieldLength(i); j++) {
+                    stringDisplay += " ";
+                }
             }
             if (i < this.fields - 1) { //1 2 many pipes
                 stringDisplay += "|";
