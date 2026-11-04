@@ -4,6 +4,7 @@ import java.io.*;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Scanner;
 import java.util.regex.Pattern;
 
@@ -42,6 +43,7 @@ public class Main {
     public static void main(String[] args) {
 
         readCSV();
+        sortList(transactions);
         homeScreen();
         scanner.close();
 
@@ -119,7 +121,7 @@ public class Main {
     //region PRINT TO SCREEN - SCREENS
 
     public static String ledgerScreen() {
-        return "7          A) Display all entries D) Display Deposits P) Display Payments R) Custom search             |";
+        return "7             A) Display all entries D) Display Deposits P) Display Payments R) Reports                |";
     }
 
     public static String homeScreenOptionsDisplay() {
@@ -127,7 +129,8 @@ public class Main {
     }
 
     public static String ledgersReportScreen() {
-        return "7       1) Month To Date 2) Previous Month 3) Year To Date 4) Previous Year  5) Search by Vendor       |";
+        return "7       1) Month To Date 2) Previous Month 3) Year To Date 4) Previous Year  5) Search by Vendor       |" +
+                "\n8                                  6) Custom Search B) Recall to Home                                  |";
     }
 
     //endregion
@@ -192,7 +195,7 @@ public class Main {
 
         switch (displayScreen) {
             case "homescreen" -> {
-                //homeScreenDisplay.replace(105 * 6 + 1, 105 * 6 + 1 + homeScreenOptionsDisplay().length(), homeScreenOptionsDisplay());
+                homeScreenDisplay.replace(105 * 6 + 1, 105 * 6 + 1 + homeScreenOptionsDisplay().length(), homeScreenOptionsDisplay());
                 homeScreenDisplay.replace(positionX, positionX + 1, "❤️");
                 homeScreenDisplay.delete(positionX - 1, positionX);
                 System.out.println(homeScreenDisplay);
@@ -210,7 +213,7 @@ public class Main {
                 System.out.println(homeScreenDisplay);
             }
             case "ledgersReportScreen" -> {
-                homeScreenDisplay.replace(105* 6 +1, 105 * 6 +1 + ledgersReportScreen().length(), ledgersReportScreen());
+                homeScreenDisplay.replace(105* 6 + 1, 105 * 6 + 1 + ledgersReportScreen().length(), ledgersReportScreen());
                 homeScreenDisplay.replace(positionX, positionX + 1, "❤️");
                 homeScreenDisplay.delete(positionX - 1, positionX);
                 System.out.println(homeScreenDisplay);
@@ -270,6 +273,11 @@ public class Main {
             case "3" -> {displayTransactions("yearToDate");}
             case "4" -> {displayTransactions("previousYear");}
             case "5" -> {displayTransactions("searchByVendor");}
+            case "6" -> {}
+            case "b" -> {
+                displayScreen = "homescreen";
+                userInput = "0";
+            }
             case "x" -> {
                 displayScreen = "ledgerscreen";
                 userInput = "0";
@@ -374,9 +382,11 @@ public class Main {
                 5                   ██╔╝ ██╗       ██║   ╚██████╔╝    ███████╗██╔╝ ██╗██║   ██║                        |
                 6                   ╚═╝  ╚═╝       ╚═╝    ╚═════╝     ╚══════╝╚═╝  ╚═╝╚═╝   ╚═╝                        |""");
         System.out.println(exit);
-        for (int i = transactions.size() - 1; i >= 0; i--) {
+        for (int i = 0; i < transactions.size(); i++) {
             switch (displayOption) {
-                case "all" -> System.out.println(transactions.get(i).stringDisplay(transactions, i));
+                case "all" -> {
+                    System.out.println(transactions.get(i).stringDisplay(transactions, i));
+                }
                 case "deposits" -> {
                     if (!transactions.get(i).isPayment()) {
                         System.out.println(transactions.get(i).stringDisplay(transactions, i));
@@ -433,5 +443,38 @@ public class Main {
         userInput = "0";
     }
 
+    public static void sortList (ArrayList<Transaction> transactionList) {
+        ArrayList<Transaction> sortedTransactions = new ArrayList<>();
+        String dateIndexString = "";
+        for (int i = 0; i < transactionList.size(); i++) {
+            String dateString = String.format("%s", transactionList.get(i).getDate());
+            String[] splitDate = dateString.split(Pattern.quote("-"));
+            for (int j = 0; j < splitDate.length; j++) {
+                dateIndexString += splitDate[j];
+            }
+            dateIndexString += String.format(".%d|", i);
+        }
+        String[] datesList = dateIndexString.split(Pattern.quote("|"));
+        Double[] datesSortIndex = new Double[datesList.length];
+        for (int i = 0; i < datesList.length; i++) {
+            datesSortIndex[i] = Double.parseDouble(datesList[i]);
+        }
+        Arrays.sort(datesSortIndex);
+        int index = 0;
+        for (int i = 0; i < datesSortIndex.length; i++) {
+            String format = String.format("%s", datesSortIndex[i]);
+            format = format.substring(9);
+            int zeros = format.length();
+            zeros -= 2;
+            if (zeros <= 0) {
+                index = 0;
+            } else {
+                index = Integer.parseInt(format.substring(0, zeros));
+            }
+            sortedTransactions.add(transactionList.get(index));
+        }
+        transactions.clear();
+        transactions.addAll(sortedTransactions);
+    }
 
 }
