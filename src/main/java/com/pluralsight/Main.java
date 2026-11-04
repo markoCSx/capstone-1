@@ -273,7 +273,7 @@ public class Main {
             case "3" -> {displayTransactions("yearToNow");}
             case "4" -> {displayTransactions("previousYear");}
             case "5" -> {displayTransactions("searchByVendor");}
-            case "6" -> {}
+            case "6" -> {customSearch();}
             case "b" -> {
                 displayScreen = "homescreen";
                 userInput = "0";
@@ -487,6 +487,78 @@ public class Main {
         transactions = newTrasnactions;
     }
 
+    public static void customSearch() {
+        LocalDate startDate = LocalDate.now();
+        LocalDate endDate = LocalDate.now();
+        String year = String.format("%s", LocalDate.now().getYear());
+        String month = String.format("%s", LocalDate.now().getMonthValue());
+        String day = String.format("%s", LocalDate.now().getDayOfMonth());
+        String description;
+        String vendor;
+        double amount;
+        int counter = 1;
+        do {
+            System.out.println("""
+                    Enter nothing to use current date fields
+                    M for more options
+                    (yyyy-MM-dd)
+                    """);
+            switch (counter) {
+                case 1 -> System.out.println("Enter Start Date: ");
+                case 2 -> System.out.println("Enter End Date: ");
+            }
+            userInput = scanner.nextLine();
+            if (userInput.equalsIgnoreCase("m")) {
+                System.out.println("Year: ");
+                userInput = scanner.nextLine();
+                if (!userInput.isBlank()) {
+                    year = userInput;
+                }
+                System.out.println("Month: ");
+                userInput = scanner.nextLine();
+                if (!userInput.isBlank()) {
+                    month = userInput;
+                }
+                System.out.println("Day: ");
+                userInput = scanner.nextLine();
+                if (!userInput.isBlank()) {
+                    day = userInput;
+                }
+                switch (counter) {
+                    case 1 -> {
+                        startDate = LocalDate.parse(String.format("%s-%s-%s", year, month, day));
+                        counter++;
+                    }
+                    case 2 -> {
+                        endDate = LocalDate.parse(String.format("%s-%s-%s", year, month, day));
+                        counter++;
+                    }
+                }
+            } else {
+                switch (counter) {
+                    case 1 -> {
+                        if (!userInput.isBlank()) {
+                            startDate = LocalDate.parse(userInput);
+                            counter++;
+                        } else {
+                            counter++;
+                        }
+                    }
+                    case 2 -> {
+                        if (!userInput.isBlank()) {
+                            endDate = LocalDate.parse(userInput);
+                            counter++;
+                        } else {
+                            counter++;
+                        }
+                    }
+                }
+            }
+        } while (counter < 3);
 
+
+
+
+    }
 
 }
