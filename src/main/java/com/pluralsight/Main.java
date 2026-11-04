@@ -3,9 +3,7 @@ package com.pluralsight;
 import java.io.*;
 import java.time.LocalDate;
 import java.time.LocalTime;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Scanner;
+import java.util.*;
 import java.util.regex.Pattern;
 
 /* todo merge deposit and payment!!!!!!!!!!
@@ -15,6 +13,8 @@ todo read .csv -> deposit/payment
 todo have heartMovement always being checked for and homescreen
 
 todo differentiate deposit payment
+
+todo make payments show negative
 
 todo add more comments / have questions pop up on main screen
 todo / bank, shops, phone / better ui / maybe find a better way to display screen
@@ -43,7 +43,7 @@ public class Main {
     public static void main(String[] args) {
 
         readCSV();
-        sortList(transactions);
+        sortList();
         homeScreen();
         scanner.close();
 
@@ -270,7 +270,7 @@ public class Main {
         switch (userInput.toLowerCase()) {
             case "1" -> {displayTransactions("monthToDate");}
             case "2" -> {displayTransactions("previousMonth");}
-            case "3" -> {displayTransactions("yearToDate");}
+            case "3" -> {displayTransactions("yearToNow");}
             case "4" -> {displayTransactions("previousYear");}
             case "5" -> {displayTransactions("searchByVendor");}
             case "6" -> {}
@@ -369,6 +369,7 @@ public class Main {
     }
 
     public static void displayTransactions(String displayOption) {
+        sortList();
         StringBuilder clearScreen = new StringBuilder();
         for (int i = 0; i < 25; i++) {
             clearScreen.append("\n");
@@ -443,38 +444,49 @@ public class Main {
         userInput = "0";
     }
 
-    public static void sortList (ArrayList<Transaction> transactionList) {
-        ArrayList<Transaction> sortedTransactions = new ArrayList<>();
-        String dateIndexString = "";
-        for (int i = 0; i < transactionList.size(); i++) {
-            String dateString = String.format("%s", transactionList.get(i).getDate());
+    public static void sortList () {
+        HashMap<Integer, Long> indexDate = new HashMap<>();
+        String dates = "";
+        for (int i = 0; i < transactions.size(); i++) {
+            String dateString = String.format("%s", transactions.get(i).getDate());
             String[] splitDate = dateString.split(Pattern.quote("-"));
             for (int j = 0; j < splitDate.length; j++) {
-                dateIndexString += splitDate[j];
+                dates += splitDate[j];
             }
-            dateIndexString += String.format(".%d|", i);
+            dates += "|";
         }
-        String[] datesList = dateIndexString.split(Pattern.quote("|"));
-        Double[] datesSortIndex = new Double[datesList.length];
+
+        String[] datesList = dates.split(Pattern.quote("|"));
+        Long[] longDates = new Long[datesList.length];
         for (int i = 0; i < datesList.length; i++) {
-            datesSortIndex[i] = Double.parseDouble(datesList[i]);
+            longDates[i] = Long.parseLong(datesList[i]);
+            indexDate.put(i, longDates[i]);
         }
-        Arrays.sort(datesSortIndex);
-        int index = 0;
-        for (int i = 0; i < datesSortIndex.length; i++) {
-            String format = String.format("%s", datesSortIndex[i]);
-            format = format.substring(9);
-            int zeros = format.length();
-            zeros -= 2;
-            if (zeros <= 0) {
-                index = 0;
-            } else {
-                index = Integer.parseInt(format.substring(0, zeros));
+
+        ArrayList<Integer> sortedIndex = new ArrayList<>();
+        ArrayList<Integer> index = new ArrayList<>();
+        for (int i = 0; i < transactions.size(); i++) {
+            index.add(i);
+        }
+        while (!index.isEmpty()) {
+            int holdIndex = 0;
+            Long smallestNum = 90000000L;
+            for (int i = 0; i < index.size(); i++) {
+                if (indexDate.get(index.get(i)) < smallestNum) {
+                    smallestNum = indexDate.get(index.get(i));
+                    holdIndex = i;
+                }
             }
-            sortedTransactions.add(transactionList.get(index));
+            sortedIndex.add(index.get(holdIndex));
+            index.remove(holdIndex);
         }
-        transactions.clear();
-        transactions.addAll(sortedTransactions);
+        ArrayList<Transaction> newTrasnactions = new ArrayList<>();
+        for (int i = 0; i < transactions.size(); i++) {
+            newTrasnactions.add(transactions.get(sortedIndex.get(i)));
+        }
+        transactions = newTrasnactions;
     }
+
+
 
 }
