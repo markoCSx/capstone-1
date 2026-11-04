@@ -269,7 +269,7 @@ public class Main {
             case "1" -> {
                 displayTransactions("monthToDate");}
             case "2" -> {
-                displayTransactions("deposits");}
+                displayTransactions("previousMonth");}
             case "3" -> {
                 displayTransactions("payments");}
             case "4" -> {displayScreen= "ledgerReportsScreen";}
@@ -398,6 +398,11 @@ public class Main {
                 }
                 case "monthToDate" -> {
                     if (transactions.get(i).getDate().isEqual(LocalDate.now().withDayOfMonth(1)) || transactions.get(i).getDate().isAfter(LocalDate.now().withDayOfMonth(1))) {
+                        System.out.println(transactions.get(i).stringDisplay(transactions, i));
+                    }
+                }
+                case "previousMonth" -> {
+                    if (transactions.get(i).getDate().isEqual(LocalDate.now().minusMonths(1).withDayOfMonth(1)) || transactions.get(i).getDate().isAfter(LocalDate.now().minusMonths(1).withDayOfMonth(1)) && transactions.get(i).getDate().isBefore(LocalDate.now().withDayOfMonth(1))) {
                         System.out.println(transactions.get(i).stringDisplay(transactions, i));
                     }
                 }
