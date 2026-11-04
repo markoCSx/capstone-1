@@ -43,6 +43,7 @@ public class Main {
 
         readCSV();
         homeScreen();
+        dateReports();
         scanner.close();
 
     }
@@ -126,7 +127,7 @@ public class Main {
         return "7                    D) Add Deposit    P) Make Payment (Debit)    L) Ledger                            |";
     }
 
-    public static String ledgerReportsScreen() {
+    public static String ledgersReportScreen() {
         return "7       1) Month To Date 2) Previous Month 3) Year To Date 4) Previous Year  5) Search by Vendor       |";
     }
 
@@ -209,8 +210,8 @@ public class Main {
                 homeScreenDisplay.delete(positionX - 1, positionX);
                 System.out.println(homeScreenDisplay);
             }
-            case "ledgerReportsScreen" -> {
-                homeScreenDisplay.replace(105* 6 +1, 105 * 6 +1 + ledgerReportsScreen().length(), ledgerReportsScreen());
+            case "ledgersReportScreen" -> {
+                homeScreenDisplay.replace(105* 6 +1, 105 * 6 +1 + ledgersReportScreen().length(), ledgersReportScreen());
                 homeScreenDisplay.replace(positionX, positionX + 1, "❤️");
                 homeScreenDisplay.delete(positionX - 1, positionX);
                 System.out.println(homeScreenDisplay);
@@ -237,6 +238,8 @@ public class Main {
                     homeScreenOptions();
                 } else if (displayScreen.equals("ledgerscreen")) {
                     ledgerOptions();
+                } else if (displayScreen.equals("ledgersReportScreen")) {
+                    ledgersReportOptions();
                 }
             }
         }
@@ -244,10 +247,13 @@ public class Main {
 
     private static void ledgerOptions() {
         switch (userInput.toLowerCase()) {
-            case "a" -> {displayDeposits("all");}
-            case "d" -> {displayDeposits("deposits");}
-            case "p" -> {displayDeposits("payments");}
-            case "r" -> {displayScreen= "ledgerReportsScreen";}
+            case "a" -> {
+                displayTransactions("all");}
+            case "d" -> {
+                displayTransactions("deposits");}
+            case "p" -> {
+                displayTransactions("payments");}
+            case "r" -> {displayScreen= "ledgersReportScreen";}
             case "x" -> {
                 displayScreen = "homescreen";
                 userInput = "0";
@@ -256,6 +262,33 @@ public class Main {
             }
         }
 
+    }
+
+    private static void ledgersReportOptions() {
+        switch (userInput.toLowerCase()) {
+            case "1" -> {
+                displayTransactions("monthToDate");}
+            case "2" -> {
+                displayTransactions("deposits");}
+            case "3" -> {
+                displayTransactions("payments");}
+            case "4" -> {displayScreen= "ledgerReportsScreen";}
+            case "5" -> {}
+            case "x" -> {
+                displayScreen = "ledgerscreen";
+                userInput = "0";
+            }
+            default -> {
+            }
+        }
+    }
+
+    public static void dateReports() {
+        for (int i = 0; i < transactions.size(); i++) {
+            if (transactions.get(i).getDate().isEqual(LocalDate.now().withDayOfMonth(1)) || transactions.get(i).getDate().isAfter(LocalDate.now().withDayOfMonth(1))) {
+                System.out.println(transactions.get(i).stringDisplay(transactions, i));
+            }
+        }
     }
 
     private static void homeScreenOptions() {
@@ -339,7 +372,7 @@ public class Main {
         displayHomeScreen();
     }
 
-    public static void displayDeposits(String displayOption) {
+    public static void displayTransactions(String displayOption) {
         for (int i = 0; i < 10; i++) {
             System.out.println("\n");
         }
@@ -360,6 +393,11 @@ public class Main {
                 }
                 case "payments" -> {
                     if (transactions.get(i).isPayment()) {
+                        System.out.println(transactions.get(i).stringDisplay(transactions, i));
+                    }
+                }
+                case "monthToDate" -> {
+                    if (transactions.get(i).getDate().isEqual(LocalDate.now().withDayOfMonth(1)) || transactions.get(i).getDate().isAfter(LocalDate.now().withDayOfMonth(1))) {
                         System.out.println(transactions.get(i).stringDisplay(transactions, i));
                     }
                 }
