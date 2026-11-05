@@ -488,54 +488,29 @@ public class Main {
     }
 
     public static void customSearch() {
-        LocalDate startDate = LocalDate.now();
+        LocalDate startDate = LocalDate.parse("0001-01-01");
         LocalDate endDate = LocalDate.now();
-        String year = String.format("%s", LocalDate.now().getYear());
-        String month = String.format("%s", LocalDate.now().getMonthValue());
-        String day = String.format("%s", LocalDate.now().getDayOfMonth());
-        String description = "";
-        String vendor = "";
+        String description = null;
+        String vendor = null;
         double amount = 0;
+        double amount2 = 0;
+
         int counter = 1;
-        try {
-            do {
-                System.out.println("""
-                        Enter nothing to use current date fields
-                        M for more options
-                        (yyyy-MM-dd)
-                        """);
-                switch (counter) {
-                    case 1 -> System.out.print("Enter Start Date: ");
-                    case 2 -> System.out.print("Enter End Date: ");
-                }
-                userInput = scanner.nextLine();
-                if (userInput.equalsIgnoreCase("m")) {
-                    System.out.print("Year: ");
-                    userInput = scanner.nextLine();
-                    if (!userInput.isBlank()) {
-                        year = userInput;
-                    }
-                    System.out.print("Month: ");
-                    userInput = scanner.nextLine();
-                    if (!userInput.isBlank()) {
-                        month = userInput;
-                    }
-                    System.out.print("Day: ");
-                    userInput = scanner.nextLine();
-                    if (!userInput.isBlank()) {
-                        day = userInput;
-                    }
+        do {
+            try {
+                do {
+                    System.out.println("""
+                            Press Enter to Skip
+                            (yyyy-MM-dd)
+                            """);
                     switch (counter) {
-                        case 1 -> {
-                            startDate = LocalDate.parse(String.format("%s-%s-%s", year, month, day));
-                            counter++;
-                        }
-                        case 2 -> {
-                            endDate = LocalDate.parse(String.format("%s-%s-%s", year, month, day));
-                            counter++;
-                        }
+                        case 1 -> System.out.print("Enter Start Date: ");
+                        case 2 -> System.out.print("Enter End Date: ");
                     }
-                } else {
+                    userInput = scanner.nextLine();
+                    if (userInput.equalsIgnoreCase("x")) {
+                        break;
+                    }
                     switch (counter) {
                         case 1 -> {
                             if (!userInput.isBlank()) {
@@ -554,26 +529,98 @@ public class Main {
                             }
                         }
                     }
+                } while (counter < 3);
+                if (userInput.equalsIgnoreCase("x")) {
+                    break;
                 }
-            } while (counter < 3);
-            System.out.print("Leave blank to skip\nDescription: ");
-            userInput = scanner.nextLine();
-            if (!userInput.isBlank()) {
-                description = userInput;
+                System.out.print("Leave blank to skip\nDescription: ");
+                userInput = scanner.nextLine();
+                if (userInput.equalsIgnoreCase("x")) {
+                    break;
+                }
+                if (!userInput.isBlank()) {
+                    description = userInput;
+                }
+                System.out.print("Vendor: ");
+                userInput = scanner.nextLine();
+                if (userInput.equalsIgnoreCase("x")) {
+                    break;
+                }
+                if (!userInput.isBlank()) {
+                    vendor = userInput;
+                }
+                System.out.print("Amount: ");
+                userInput = scanner.nextLine();
+                if (userInput.equalsIgnoreCase("x")) {
+                    break;
+                }
+                if (!userInput.isBlank()) {
+                    amount = Double.parseDouble(userInput);
+                    System.out.print("Second Amount: ");
+                    userInput = scanner.nextLine();
+                    if (!userInput.isBlank()) {
+                        amount2 = Double.parseDouble(userInput);
+                    } else {
+                        amount2 = amount;
+                    }
+                }
+            } catch (Exception e) {
+                System.err.println(e.getMessage());
             }
-            System.out.print("Vendor: ");
-            userInput = scanner.nextLine();
-            if (!userInput.isBlank()) {
-                vendor = userInput;
+
+            ArrayList<Transaction> filteredDates = new ArrayList<>();
+            for (int i = 0; i < transactions.size(); i++) {
+                if ((transactions.get(i).getDate().isEqual(startDate) || transactions.get(i).getDate().isAfter(startDate)) && transactions.get(i).getDate().isBefore(endDate)) {
+                    filteredDates.add(transactions.get(i));
+                }
             }
-            System.out.print("Vendor: ");
-            userInput = scanner.nextLine();
-            if (!userInput.isBlank()) {
-                amount = Double.parseDouble(userInput);
+            ArrayList<Transaction> filteredList = descriptionFilter(filteredDates, description, vendor, amount, amount2);
+            for (int i = 0; i < filteredList.size(); i++) {
+                System.out.println(filteredList.get(i).stringDisplay(filteredList, i));
             }
-        } catch (Exception e) {
-            System.err.println(e.getMessage());
+        } while (userInput.equalsIgnoreCase("x"));
+        userInput = "0";
+
+
+    }
+    public static ArrayList<Transaction> descriptionFilter(ArrayList<Transaction> filteredDates, String description, String vendor, double amount, double amount2) {
+        if (description != null) {
+            ArrayList<Transaction> filteredDescriptions = new ArrayList<>();
+            for (int i = 0; i < filteredDates.size(); i++) {
+                if (filteredDates.get(i).getDescription().equalsIgnoreCase(description)) {
+                    filteredDescriptions.add(filteredDates.get(i));
+                }
+            }
+            return vendorFilter(filteredDescriptions, description, vendor, amount, amount2);
+        } else {
+            return vendorFilter(filteredDates, description, vendor, amount, amount2);
         }
     }
+    public static ArrayList<Transaction> vendorFilter(ArrayList<Transaction> filteredDescriptions, String description, String vendor, double amount, double amount2) {
+        if (vendor != null) {
+            ArrayList<Transaction> filteredVendor = new ArrayList<>();
+            for (int i = 0; i < filteredDescriptions.size(); i++) {
+                if (filteredDescriptions.get(i).getVendor().equalsIgnoreCase(vendor)) {
+                    filteredVendor.add(filteredDescriptions.get(i));
+                }
+            }
+            return amountFilter(filteredVendor, description, vendor, amount, amount2);
+        } else {
+            return amountFilter(filteredDescriptions, description, vendor, amount, amount2);
+        }
+    }
+    public static ArrayList<Transaction> amountFilter(ArrayList<Transaction> filteredVendor, String description, String vendor, double amount, double amount2) {
+        if (amount != 0) {
+            ArrayList<Transaction> filteredAmount = new ArrayList<>();
+            for (int i = 0; i < filteredVendor.size(); i++) {
+                if (filteredVendor.get(i).getAmount() >= amount && filteredVendor.get(i).getAmount() <= amount2) {
+                    filteredAmount.add(filteredVendor.get(i));
+                }
+            }
+            return filteredAmount;
+        }
+        return filteredVendor;
+    }
+
 
 }
