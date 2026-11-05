@@ -29,6 +29,8 @@ public class Main {
 
     public static Scanner scanner = new Scanner(System.in);
 
+    public static int files = 0;
+
     public static int positionX = 2572;
     public static int positionY = 25;
 
@@ -578,6 +580,11 @@ public class Main {
             for (int i = 0; i < filteredList.size(); i++) {
                 System.out.println(filteredList.get(i).stringDisplay(filteredList, i));
             }
+            createNewCSV(filteredList, startDate, endDate, description, vendor, amount, amount2);
+            do {
+                userInput = scanner.nextLine();
+            } while (!userInput.equalsIgnoreCase("x"));
+            break;
         } while (userInput.equalsIgnoreCase("x"));
         userInput = "0";
 
@@ -621,6 +628,20 @@ public class Main {
         }
         return filteredVendor;
     }
+    public static void createNewCSV(ArrayList<Transaction> searchFilterList, LocalDate startDate, LocalDate endDate, String description, String vendor, double amount, double amount2) {
+        try{
+            FileWriter fileWriter = new FileWriter(String.format("src/main/resources/customSearch%d.csv", files));
+            BufferedWriter bufferedWriter = new BufferedWriter(fileWriter);
 
+            bufferedWriter.write(String.format("Start %s - %s End|Description: %s|Vendor: %s|Amount: %.2f - Second Amount: %.2f", startDate, endDate, description, vendor, amount, amount2));
+            for (int i = 0; i < searchFilterList.size(); i++) {
+                bufferedWriter.write("\n" + searchFilterList.get(i).stringDisplay(searchFilterList, i));
+            }
+            bufferedWriter.close();
+            files += 1;
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
 
 }
