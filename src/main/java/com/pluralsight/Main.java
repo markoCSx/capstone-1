@@ -29,25 +29,25 @@ public class Main {
 
     public static Scanner scanner = new Scanner(System.in);
 
-    public static int files = 0;
+    public static int files = 1; //Numbering each new Custom Search .csv
 
-    public static int positionX = 2572;
-    public static int positionY = 25;
+    public static int positionX = 2572; //Heart position in the StringBuilder //Width before newline is 105
+    public static int positionY = 25; //How many newlines
 
-    public static String userInput = "0";
+    public static String userInput = "0"; //0 is default so userInput can be "x" to exit without closing the whole app, Change back to 0 everytime "x" is inputed
 
-    public static String displayScreen = "homescreen";
+    public static String displayScreen = "homescreen"; //Default Screen for app
 
-    public static ArrayList<Transaction> transactions = new ArrayList<>();
+    public static ArrayList<Transaction> transactions = new ArrayList<>(); //Global to have less parameters , List of all transactions CSV included
 
     //endregion
 
     public static void main(String[] args) {
 
-        readCSV();
-        sortList();
-        homeScreen();
-        scanner.close();
+        readCSV(); //Reads the .csv to add the list into transactions ArrayList<Transaction>
+        sortList(); //Sorts the recently made list
+        homeScreen(); //Calls the main app that runs the whole show will start with the homescreen
+        scanner.close(); //Closes Scanner to stop leak
 
     }
 
@@ -70,7 +70,7 @@ public class Main {
             System.err.println("Restart Application .csv file unable to be read");;
         }
 
-    }
+    } //Reads lines from the .csv one by one turns it into a String then sends it to addTransaction method to be put into the Transaction ArrayList
 
     public static void addToCSV(Transaction newtransaction) {
         try{
@@ -82,7 +82,7 @@ public class Main {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-    }
+    } //Any newly user input transactions get sent here to get written into the main transactions.csv
 
     public static void addTransaction (String transactionString, Boolean fromCSV) {
         String[] transactionSplit;
@@ -116,7 +116,8 @@ public class Main {
         } catch (Exception e) {
             System.err.println(e.getMessage());
         }
-    }
+    } //Takes a String containing all variables to make a Transaction and adds it to the Transaction ArraryList, also if its from the CSV it avoids writing it for duplicates
+
 
     //endregion
 
@@ -124,16 +125,16 @@ public class Main {
 
     public static String ledgerScreen() {
         return "7             A) Display all entries D) Display Deposits P) Display Payments R) Reports                |";
-    }
+    } //String to differentiate which screen you are on and shows your options
 
     public static String homeScreenOptionsDisplay() {
         return "7                    D) Add Deposit    P) Make Payment (Debit)    L) Ledger                            |";
-    }
+    } //String to differentiate which screen you are on and shows your options
 
     public static String ledgersReportScreen() {
         return "7       1) Month To Date 2) Previous Month 3) Year To Date 4) Previous Year  5) Search by Vendor       |" +
                 "\n8                                  6) Custom Search B) Recall to Home                                  |";
-    }
+    } //String to differentiate which screen you are on and shows your options
 
     //endregion
 
@@ -148,7 +149,7 @@ public class Main {
 
         } while (!userInput.equalsIgnoreCase("x"));
 
-    }
+    } //Loop to say in the application and constantly displaying screens and asking for user input
 
     public static void displayHomeScreen() {
         StringBuilder homeScreenDisplay = new StringBuilder("""
@@ -225,7 +226,7 @@ public class Main {
             }
         }
 
-    }
+    } //Hub for all screens
 
     //endregion
 
@@ -247,7 +248,7 @@ public class Main {
                 }
             }
         }
-    }
+    } //Main call for userInputs to navigate screens, caller of the other screens options
 
     private static void ledgerOptions() {
         switch (userInput.toLowerCase()) {
@@ -266,7 +267,7 @@ public class Main {
             }
         }
 
-    }
+    } //Gets called if user is on the ledger screen, these are the options
 
     private static void ledgersReportOptions() {
         switch (userInput.toLowerCase()) {
@@ -287,7 +288,7 @@ public class Main {
             default -> {
             }
         }
-    }
+    } //Gets called if user is on the ledgers report screen, these are the options
 
     private static void homeScreenOptions() {
 
@@ -300,7 +301,7 @@ public class Main {
             }
         }
 
-    }
+    } //Gets called if user is on the Home screen, these are the options
     //endregion
 
     public static void transactionQuestions() {
@@ -368,7 +369,7 @@ public class Main {
         addTransaction(transactionString, false);
         displayScreen = "homescreen";
         displayHomeScreen();
-    }
+    } //List of 5 questions that need to be answered to make a Transaction
 
     public static void displayTransactions(String displayOption) {
         sortList();
@@ -487,7 +488,7 @@ public class Main {
             newTrasnactions.add(transactions.get(sortedIndex.get(i)));
         }
         transactions = newTrasnactions;
-    }
+    } //Sorts LocalDates from an ArraryList and reorders the original List
 
     public static void customSearch() {
         LocalDate startDate = LocalDate.parse("0001-01-01");
@@ -589,7 +590,8 @@ public class Main {
         userInput = "0";
 
 
-    }
+    } //Custom search chain questioning to filter out the Transaction ArrayList
+    //region Methods to filter the list based on users inputs
     public static ArrayList<Transaction> descriptionFilter(ArrayList<Transaction> filteredDates, String description, String vendor, double amount, double amount2) {
         if (description != null) {
             ArrayList<Transaction> filteredDescriptions = new ArrayList<>();
@@ -633,7 +635,7 @@ public class Main {
             FileWriter fileWriter = new FileWriter(String.format("src/main/resources/customSearch%d.csv", files));
             BufferedWriter bufferedWriter = new BufferedWriter(fileWriter);
 
-            bufferedWriter.write(String.format("Start %s - %s End|Description: %s|Vendor: %s|Amount: %.2f - Second Amount: %.2f", startDate, endDate, description, vendor, amount, amount2));
+            bufferedWriter.write(String.format("%s-%s|Description: %s|Vendor: %s|Amount: %.2f - %.2f", startDate, endDate, description, vendor, amount, amount2));
             for (int i = 0; i < searchFilterList.size(); i++) {
                 bufferedWriter.write("\n" + searchFilterList.get(i).stringDisplay(searchFilterList, i));
             }
@@ -643,5 +645,5 @@ public class Main {
             throw new RuntimeException(e);
         }
     }
-
+    //endregion
 }
