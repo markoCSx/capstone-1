@@ -81,6 +81,21 @@ public class Transaction {
                     stringDisplay += " ";
                 }
             }
+            if (i == 1) { //To add on :01 to times for users who don't input the full time
+                int counter = 0;
+                for (int j = 0; j < 8 - transactions.get(index).fieldLength(i); j++) {
+                    if (counter == 0) {
+                        stringDisplay += ":";
+                    }
+                    if (counter == 1) {
+                        stringDisplay += "0";
+                    }
+                    if (counter == 2) {
+                        stringDisplay += "1";
+                    }
+                    counter++;
+                }
+            }
             if (i < this.fields - 1) { //1 2 many pipes, gets rid of last pipe
                 stringDisplay += "|";
             }

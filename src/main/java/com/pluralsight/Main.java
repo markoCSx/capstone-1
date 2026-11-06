@@ -211,7 +211,9 @@ public class Main {
 
     //region OPTION SELECT METHODS
     public static void keyboardInputs() { //Main call for userInputs to navigate screens, caller of the other screens options
-        userInput = scanner.nextLine();
+        if (!displayScreen.equals("deposit") && !displayScreen.equals("payment")) {
+            userInput = scanner.nextLine();
+        }
         switch (userInput.toLowerCase()) { //t, f, h, and g is to control the heart
             case "t" -> positionX -= 315; //105(would move the heart up one) is the width of the screen, times by 3 is 315(to move the heart up 3 lines)
             case "f" -> positionX -= 6;
@@ -224,16 +226,35 @@ public class Main {
                     ledgerOptions();
                 } else if (displayScreen.equals("ledgersReportScreen")) {
                     ledgersReportOptions();
+                } else if (displayScreen.equals("deposit")) {
+                    displayScreen = "transactionQuestions";
+                    transactionQuestions("deposit");
+                } else if (displayScreen.equals("payment")) {
+                    displayScreen = "transactionQuestions";
+                    transactionQuestions("payment");
                 }
             }
         }
     }
 
+
     private static void homeScreenOptions() { //Gets called if user is on the Home screen, these are the options
 
         switch (userInput.toLowerCase()) {
-            case "d" -> transactionQuestions();
-            case "p" -> transactionQuestions(); //Same call BECAUSE I'M EFFICIENT
+            case "d" -> {
+                if (displayScreen.equals("homescreen")) {
+                    transactionQuestions("deposit");
+                } else if (displayScreen.equals("transactionQuestions")) {
+                    displayScreen = "deposit";
+                }
+            }
+            case "p" -> {
+                if (displayScreen.equals("homescreen")) {
+                    transactionQuestions("payment");
+                } else if (displayScreen.equals("transactionQuestions")) {
+                    displayScreen = "payment";
+                }
+            } //Same call BECAUSE I'M EFFICIENT
             case "l" -> displayScreen = "ledgerscreen"; //option to change to ledger screen
             default -> {
                 return;
@@ -283,7 +304,7 @@ public class Main {
     }
     //endregion
 
-    public static void transactionQuestions() { //List of 5 questions that need to be answered to make a Transaction
+    public static void transactionQuestions(String transactionType) { //List of 5 questions that need to be answered to make a Transaction
         displayScreen = "transactionQuestions"; //Setting the display screen
         String transactionString = ""; //Initializing for later use where I wouldn't be allowed to initialize
         displayHomeScreen(); //Calls to print the new screen
@@ -300,6 +321,9 @@ public class Main {
                         do {
                             System.out.print("Date (yyyy-MM-dd): ");
                             keyboardInputs(); //this is so they can change their screen to any of the other options while also being on this screen answering their transaction questions
+                            if (userInput.equalsIgnoreCase("d") || userInput.equalsIgnoreCase("p") || userInput.equalsIgnoreCase("l")) {
+                                break;
+                            }
                             displayHomeScreen(); //Refreshing the printed image so they can also move the heart around :)
                         } while (userInput.length() == 1 && !userInput.equalsIgnoreCase("x") && displayScreen.equals("transactionQuestions")); //to keep checking if the user wants to stay on this path
                         transactionString += userInput + "|"; //adding pipe for future split
@@ -308,6 +332,9 @@ public class Main {
                         do {
                             System.out.print("Time (HH:mm:ss): ");
                             keyboardInputs();
+                            if (userInput.equalsIgnoreCase("d") || userInput.equalsIgnoreCase("p") || userInput.equalsIgnoreCase("l")) {
+                                break;
+                            }
                             displayHomeScreen();
                         } while (userInput.length() == 1 && !userInput.equalsIgnoreCase("x") && displayScreen.equals("transactionQuestions"));
                         transactionString += userInput + "|";
@@ -316,6 +343,9 @@ public class Main {
                         do {
                             System.out.print("Description: ");
                             keyboardInputs();
+                            if (userInput.equalsIgnoreCase("d") || userInput.equalsIgnoreCase("p") || userInput.equalsIgnoreCase("l")) {
+                                break;
+                            }
                             displayHomeScreen();
                         } while (userInput.length() == 1 && !userInput.equalsIgnoreCase("x") && displayScreen.equals("transactionQuestions"));
                         transactionString += userInput + "|";
@@ -324,6 +354,9 @@ public class Main {
                         do {
                             System.out.print("Vendor: ");
                             keyboardInputs();
+                            if (userInput.equalsIgnoreCase("d") || userInput.equalsIgnoreCase("p") || userInput.equalsIgnoreCase("l")) {
+                                break;
+                            }
                             displayHomeScreen();
                         } while (userInput.length() == 1 && !userInput.equalsIgnoreCase("x") && displayScreen.equals("transactionQuestions"));
                         transactionString += userInput + "|";
@@ -332,8 +365,15 @@ public class Main {
                         do {
                             System.out.print("Amount: ");
                             keyboardInputs();
+                            if (userInput.equalsIgnoreCase("d") || userInput.equalsIgnoreCase("p") || userInput.equalsIgnoreCase("l")) {
+                                break;
+                            }
                             displayHomeScreen();
-                        } while (userInput.length() == 1 && !userInput.equalsIgnoreCase("x") && displayScreen.equals("transactionQuestions"));
+                        } while (userInput.length() == 1 && !userInput.equalsIgnoreCase("x") && displayScreen.equals("transactionQuestions") && !userInput.equals("0") && !userInput.equals("1")  && !userInput.equals("2") && !userInput.equals("3") && !userInput.equals("4") && !userInput.equals("5") && !userInput.equals("6") && !userInput.equals("7") && !userInput.equals("8") && !userInput.equals("9"));
+                        if (transactionType.equals("payment") && Double.parseDouble(userInput) > 0) { //To not have the user make it negative themselves
+                            transactionType = "-" + userInput;
+                            userInput = transactionType;
+                        }
                         transactionString += userInput + "|";
                     }
                     default -> {
