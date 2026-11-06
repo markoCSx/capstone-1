@@ -21,6 +21,8 @@ public class Main {
 
     public static String displayScreen = "homescreen"; //Default Screen for app
 
+    public static String errorMSG = "";
+
     public static ArrayList<Transaction> transactions = new ArrayList<>(); //Global to have less parameters , List of all transactions CSV included
 
     //endregion
@@ -95,7 +97,7 @@ public class Main {
                 addToCSV(newTransaction);
             }
         } catch (Exception e) {
-            System.err.println(e.getMessage());
+            errorMSG = e.getMessage();
         }
     }
 
@@ -103,17 +105,17 @@ public class Main {
 
     //region Screen Display Modifiers
     public static String ledgerScreen() { //String to differentiate which screen you are on and shows your options
-        return "7             A) Display all entries D) Display Deposits P) Display Payments R) Reports                |";
+        return "|             A) Display all entries D) Display Deposits P) Display Payments R) Reports                |";
     }
 
     public static String homeScreenOptionsDisplay() { //String to differentiate which screen you are on and shows your options
 
-        return "7                    D) Add Deposit    P) Make Payment (Debit)    L) Ledger                            |";
+        return "|                    D) Add Deposit    P) Make Payment (Debit)    L) Ledger                            |";
     }
 
     public static String ledgersReportScreen() { //String to differentiate which screen you are on and shows your options
-        return "7       1) Month To Date 2) Previous Month 3) Year To Date 4) Previous Year  5) Search by Vendor       |" +
-                "\n8                                  6) Custom Search B) Recall to Home                                  |";
+        return "|       1) Month To Date 2) Previous Month 3) Year To Date 4) Previous Year  5) Search by Vendor       |" +
+                "\n|                                  6) Custom Search B) Recall to Home                                  |";
     }
     //endregion
 
@@ -132,38 +134,38 @@ public class Main {
     public static void displayHomeScreen() { //Hub for all screens
         StringBuilder homeScreenDisplay = new StringBuilder("""
 
-                1                   ██╗  ██╗    ████████╗ ██████╗     ███████╗██╗  ██╗██╗████████╗                     |
-                2                   ╚██╗██╔╝    ╚══██╔══╝██╔═══██╗    ██╔════╝╚██╗██╔╝██║╚══██╔══╝                     |
-                3                    ╚███╔╝        ██║   ██║   ██║    █████╗   ╚███╔╝ ██║   ██║                        |
-                4                    ██╔██╗        ██║   ██║   ██║    ██╔══╝   ██╔██╗ ██║   ██║                        |
-                5                   ██╔╝ ██╗       ██║   ╚██████╔╝    ███████╗██╔╝ ██╗██║   ██║                        |
-                6                   ╚═╝  ╚═╝       ╚═╝    ╚═════╝     ╚══════╝╚═╝  ╚═╝╚═╝   ╚═╝                        |
-                7                    D) Add Deposit    P) Make Payment (Debit)    L) Ledger                            |
-                8                                                                                                      |
-                9                                                                                                      |
-                1                                                                                                      |
-                1                                                                                                      |
-                1                                                                                                      |
-                1                                                                                                      |
-                1                                                                                                      |
-                1                                                                                                      |
-                1                                                                                                      |
-                1                                                                                                      |
-                1                                                                                                      |
-                1                                                                                                      |
-                2                                                                                                      |
-                2                                                                                                      |
-                2                                                                                                      |
-                2                                                                                                      |
-                2                                                                                                      |
-                2                                                                                                      |""");
-        StringBuilder buttons = new StringBuilder("""
-                        ┌───┐
-                ┌───┐   │ T │   ┌───┐
-                │ F │   └───┘   │ H │
-                └───┘   ┌───┐   └───┘
-                        │ G │
-                        └───┘
+                |                   ██╗  ██╗    ████████╗ ██████╗     ███████╗██╗  ██╗██╗████████╗                     |
+                |                   ╚██╗██╔╝    ╚══██╔══╝██╔═══██╗    ██╔════╝╚██╗██╔╝██║╚══██╔══╝                     |
+                |                    ╚███╔╝        ██║   ██║   ██║    █████╗   ╚███╔╝ ██║   ██║                        |
+                |                    ██╔██╗        ██║   ██║   ██║    ██╔══╝   ██╔██╗ ██║   ██║                        |
+                |                   ██╔╝ ██╗       ██║   ╚██████╔╝    ███████╗██╔╝ ██╗██║   ██║                        |
+                |                   ╚═╝  ╚═╝       ╚═╝    ╚═════╝     ╚══════╝╚═╝  ╚═╝╚═╝   ╚═╝                        |
+                |                    D) Add Deposit    P) Make Payment (Debit)    L) Ledger                            |
+                |                                                                                                      |
+                |                                                                                                      |
+                |                                                                                                      |
+                |                                                                                                      |
+                |                                                                                                      |
+                |                                                                                                      |
+                |                                                                                                      |
+                |                                                                                                      |
+                |                                                                                                      |
+                |                                                                                                      |
+                |                                                                                                      |
+                |                                                                                                      |
+                |                                                                                                      |
+                |                                                                                                      |
+                |                                                                                                      |
+                |                                                                                                      |
+                |                                                                                                      |
+                |                                                                                                      |""");
+        StringBuilder textBox = new StringBuilder("""
+                ╔══════════════════════════════════════════════════════════════════════════════════════════════════════╗
+                ║                                                                                                      ║
+                ║                                                                                                      ║
+                ║                                                                                                      ║
+                ║                                                                                                      ║
+                ╚══════════════════════════════════════════════════════════════════════════════════════════════════════╝
                 """);
         if (positionX < 0) {
             positionX += homeScreenDisplay.length();
@@ -175,13 +177,15 @@ public class Main {
         homeScreenDisplay.replace(positionX, positionX + 1, "❤️");
         homeScreenDisplay.delete(positionX - 1, positionX);
 
+        textBox.replace(215, 215 + errorMSG.length() + 1, "*" + errorMSG);
+
         switch (displayScreen) { //Switch controlling which screen should be printed and which options the user has
             case "homescreen" -> {
                 homeScreenDisplay.replace(105 * 6 + 1, 105 * 6 + 1 + homeScreenOptionsDisplay().length(), homeScreenOptionsDisplay());
                 homeScreenDisplay.replace(positionX, positionX + 1, "❤️");
                 homeScreenDisplay.delete(positionX - 1, positionX);
                 System.out.println(homeScreenDisplay);
-                System.out.println(buttons);
+                System.out.println(textBox);
             }
             case "ledgerscreen" -> {
                 homeScreenDisplay.replace(105* 6 +1, 105 * 6 +1 + ledgerScreen().length(), ledgerScreen());
@@ -204,13 +208,13 @@ public class Main {
                 break;
             }
         }
-
     }
     //endregion
 
 
     //region OPTION SELECT METHODS
     public static void keyboardInputs() { //Main call for userInputs to navigate screens, caller of the other screens options
+        errorMSG = "";
         if (!displayScreen.equals("deposit") && !displayScreen.equals("payment")) {
             userInput = scanner.nextLine();
         }
@@ -305,6 +309,19 @@ public class Main {
     //endregion
 
     public static void transactionQuestions(String transactionType) { //List of 5 questions that need to be answered to make a Transaction
+        String date = "";
+        String time = "";
+        String description = "";
+        String vendor = "";
+        String amount = "";
+        StringBuilder textBox = new StringBuilder("""
+                ╔══════════════════════════════════════════════════════════════════════════════════════════════════════╗
+                ║                                                                                                      ║
+                ║                                                                                                      ║
+                ║                                                                                                      ║
+                ║                                                                                                      ║
+                ╚══════════════════════════════════════════════════════════════════════════════════════════════════════╝
+                """);
         displayScreen = "transactionQuestions"; //Setting the display screen
         String transactionString = ""; //Initializing for later use where I wouldn't be allowed to initialize
         displayHomeScreen(); //Calls to print the new screen
@@ -319,62 +336,93 @@ public class Main {
                 switch (i) {
                     case 0 -> {
                         do {
-                            System.out.print("Date (yyyy-MM-dd): ");
+                            String questionOne = "║ *Enter Date (yyyy-MM-dd)";
+                            textBox.replace(210, 210 + questionOne.length(), questionOne);
+                            System.out.println(textBox);
                             keyboardInputs(); //this is so they can change their screen to any of the other options while also being on this screen answering their transaction questions
                             if (userInput.equalsIgnoreCase("d") || userInput.equalsIgnoreCase("p") || userInput.equalsIgnoreCase("l")) {
                                 break;
                             }
                             displayHomeScreen(); //Refreshing the printed image so they can also move the heart around :)
-                        } while (userInput.length() == 1 && !userInput.equalsIgnoreCase("x") && displayScreen.equals("transactionQuestions")); //to keep checking if the user wants to stay on this path
+                        } while (userInput.length() <= 1 && !userInput.equalsIgnoreCase("x") && displayScreen.equals("transactionQuestions")); //to keep checking if the user wants to stay on this path
                         transactionString += userInput + "|"; //adding pipe for future split
+                        date += userInput;
                     }
                     case 1 -> {
                         do {
-                            System.out.print("Time (HH:mm:ss): ");
+                            String questionTwo = String.format("║ %s *Enter Time (HH:mm:ss)", date);
+                            textBox.replace(210, 210 + questionTwo.length(), questionTwo);
+                            System.out.println(textBox);
                             keyboardInputs();
                             if (userInput.equalsIgnoreCase("d") || userInput.equalsIgnoreCase("p") || userInput.equalsIgnoreCase("l")) {
                                 break;
                             }
                             displayHomeScreen();
-                        } while (userInput.length() == 1 && !userInput.equalsIgnoreCase("x") && displayScreen.equals("transactionQuestions"));
+                        } while (userInput.length() <= 1 && !userInput.equalsIgnoreCase("x") && displayScreen.equals("transactionQuestions"));
                         transactionString += userInput + "|";
+                        time += userInput;
                     }
                     case 2 -> {
                         do {
-                            System.out.print("Description: ");
+                            String questionThree = String.format("║ %s|%s *Enter Description                                                               ", date, time);
+                            textBox.replace(210, 210 + questionThree.length(), questionThree);
+                            System.out.println(textBox);
                             keyboardInputs();
                             if (userInput.equalsIgnoreCase("d") || userInput.equalsIgnoreCase("p") || userInput.equalsIgnoreCase("l")) {
                                 break;
                             }
                             displayHomeScreen();
-                        } while (userInput.length() == 1 && !userInput.equalsIgnoreCase("x") && displayScreen.equals("transactionQuestions"));
+                        } while (userInput.length() <= 1 && !userInput.equalsIgnoreCase("x") && displayScreen.equals("transactionQuestions"));
                         transactionString += userInput + "|";
+                        description += userInput;
                     }
                     case 3 -> {
                         do {
-                            System.out.print("Vendor: ");
+                            String questionFour = String.format("║ %s|%s|%s *Enter Vendor", date, time, description);
+                            textBox.replace(210, 210 + questionFour.length(), questionFour);
+                            System.out.println(textBox);
                             keyboardInputs();
                             if (userInput.equalsIgnoreCase("d") || userInput.equalsIgnoreCase("p") || userInput.equalsIgnoreCase("l")) {
                                 break;
                             }
                             displayHomeScreen();
-                        } while (userInput.length() == 1 && !userInput.equalsIgnoreCase("x") && displayScreen.equals("transactionQuestions"));
+                        } while (userInput.length() <= 1 && !userInput.equalsIgnoreCase("x") && displayScreen.equals("transactionQuestions"));
                         transactionString += userInput + "|";
+                        vendor += userInput;
                     }
                     case 4 -> {
                         do {
-                            System.out.print("Amount: ");
+                            String questionFive = String.format("║ %s|%s|%s|%s *Enter Amount", date, time, description, vendor);
+                            textBox.replace(210, 210 + questionFive.length(), questionFive);
+                            System.out.println(textBox);
                             keyboardInputs();
                             if (userInput.equalsIgnoreCase("d") || userInput.equalsIgnoreCase("p") || userInput.equalsIgnoreCase("l")) {
                                 break;
                             }
                             displayHomeScreen();
-                        } while (userInput.length() == 1 && !userInput.equalsIgnoreCase("x") && displayScreen.equals("transactionQuestions") && !userInput.equals("0") && !userInput.equals("1")  && !userInput.equals("2") && !userInput.equals("3") && !userInput.equals("4") && !userInput.equals("5") && !userInput.equals("6") && !userInput.equals("7") && !userInput.equals("8") && !userInput.equals("9"));
+                        } while (userInput.length() <= 1 && !userInput.equalsIgnoreCase("x") && displayScreen.equals("transactionQuestions") && !userInput.equals("0") && !userInput.equals("1")  && !userInput.equals("2") && !userInput.equals("3") && !userInput.equals("4") && !userInput.equals("5") && !userInput.equals("6") && !userInput.equals("7") && !userInput.equals("8") && !userInput.equals("9"));
                         if (transactionType.equals("payment") && Double.parseDouble(userInput) > 0) { //To not have the user make it negative themselves
                             transactionType = "-" + userInput;
                             userInput = transactionType;
+                        } else {
+                            double positive = Math.abs(Double.parseDouble(userInput));
+                            userInput = String.format("%.2f", positive);
                         }
                         transactionString += userInput + "|";
+                        amount += userInput;
+                        String confirmation = String.format("║ %s|%s|%s|%s|%s *Confirm Y/X Deny", date, time, description, vendor, amount);
+                        textBox.replace(210, 210 +confirmation.length(), confirmation);
+                        System.out.println(textBox);
+                        do {
+                            keyboardInputs();
+                            displayHomeScreen();
+                            System.out.println(textBox);
+                        } while (!userInput.equalsIgnoreCase("y") && !userInput.equalsIgnoreCase("x"));
+                        if (userInput.equalsIgnoreCase("x")){
+                            displayScreen = "homescreen";
+                            userInput = "0";
+                            return;
+                        }
                     }
                     default -> {
                         userInput = "x";
@@ -398,12 +446,12 @@ public class Main {
         }
         System.out.println(clearScreen); //Cleared
         StringBuilder exit = new StringBuilder("""
-                1                   ██╗  ██╗    ████████╗ ██████╗     ███████╗██╗  ██╗██╗████████╗                     |
-                2                   ╚██╗██╔╝    ╚══██╔══╝██╔═══██╗    ██╔════╝╚██╗██╔╝██║╚══██╔══╝                     |
-                3                    ╚███╔╝        ██║   ██║   ██║    █████╗   ╚███╔╝ ██║   ██║                        |
-                4                    ██╔██╗        ██║   ██║   ██║    ██╔══╝   ██╔██╗ ██║   ██║                        |
-                5                   ██╔╝ ██╗       ██║   ╚██████╔╝    ███████╗██╔╝ ██╗██║   ██║                        |
-                6                   ╚═╝  ╚═╝       ╚═╝    ╚═════╝     ╚══════╝╚═╝  ╚═╝╚═╝   ╚═╝                        |""");
+                |                   ██╗  ██╗    ████████╗ ██████╗     ███████╗██╗  ██╗██╗████████╗                     |
+                |                   ╚██╗██╔╝    ╚══██╔══╝██╔═══██╗    ██╔════╝╚██╗██╔╝██║╚══██╔══╝                     |
+                |                    ╚███╔╝        ██║   ██║   ██║    █████╗   ╚███╔╝ ██║   ██║                        |
+                |                    ██╔██╗        ██║   ██║   ██║    ██╔══╝   ██╔██╗ ██║   ██║                        |
+                |                   ██╔╝ ██╗       ██║   ╚██████╔╝    ███████╗██╔╝ ██╗██║   ██║                        |
+                |                   ╚═╝  ╚═╝       ╚═╝    ╚═════╝     ╚══════╝╚═╝  ╚═╝╚═╝   ╚═╝                        |""");
         System.out.println(exit); //Reminding user of the button to go back
         for (int i = 0; i < transactions.size(); i++) {
             switch (displayOption) { //Argument given depending on user choice
